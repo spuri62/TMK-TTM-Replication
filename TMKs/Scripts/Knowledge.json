@@ -1,0 +1,136 @@
+{
+  "model": "Knowledge",
+  "concepts": [
+    {
+      "name": "script",
+      "description": "Knowledge representation for a causally coherent set of events."
+    },
+    {
+      "name": "entryCondition",
+      "description": "Conditions necessary for executing a script."
+    },
+    {
+      "name": "result",
+      "description": "Conditions that become true after script execution."
+    },
+    {
+      "name": "prop",
+      "description": "Objects involved in execution of a script."
+    },
+    {
+      "name": "role",
+      "description": "Agents participating in a script."
+    },
+    {
+      "name": "track",
+      "description": "Variation or subclass of a script."
+    },
+    {
+      "name": "scene",
+      "description": "Specific sequence of events within a script."
+    },
+    {
+      "name": "expectation",
+      "description": "Predicted event generated from a script."
+    },
+    {
+      "name": "configuration",
+      "description": "State of story understanding."
+    },
+    {
+      "name": "story",
+      "description": "Narrative discourse or scene to be understood."
+    }
+  ],
+  "instances": [
+    {
+      "name": "restaurantScript",
+      "concept": "script"
+    },
+    {
+      "name": "coffeehouseTrack",
+      "concept": "track"
+    },
+    {
+      "name": "fastFoodTrack",
+      "concept": "track"
+    },
+    {
+      "name": "casualDiningTrack",
+      "concept": "track"
+    },
+    {
+      "name": "formalDiningTrack",
+      "concept": "track"
+    },
+    {
+      "name": "restaurantStory",
+      "concept": "story"
+    },
+    {
+      "name": "initialConfiguration",
+      "concept": "configuration"
+    },
+    {
+      "name": "finalConfiguration",
+      "concept": "configuration"
+    }
+  ],
+  "relations": [
+    {
+      "name": "hasTrack",
+      "domain": "script",
+      "range": "track"
+    },
+    {
+      "name": "containsScene",
+      "domain": "script",
+      "range": "scene"
+    },
+    {
+      "name": "generates",
+      "domain": "script",
+      "range": "expectation"
+    },
+    {
+      "name": "understands",
+      "domain": "configuration",
+      "range": "story"
+    }
+  ],
+  "triples": [
+    {
+      "instance1": "restaurantScript",
+      "relation": "hasTrack",
+      "instance2": "coffeehouseTrack"
+    },
+    {
+      "instance1": "restaurantScript",
+      "relation": "hasTrack",
+      "instance2": "fastFoodTrack"
+    },
+    {
+      "instance1": "restaurantScript",
+      "relation": "hasTrack",
+      "instance2": "casualDiningTrack"
+    },
+    {
+      "instance1": "restaurantScript",
+      "relation": "hasTrack",
+      "instance2": "formalDiningTrack"
+    },
+    {
+      "instance1": "finalConfiguration",
+      "relation": "understands",
+      "instance2": "restaurantStory"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "goodScriptUnderstanding",
+      "description": "A story has been understood by selecting, instantiating, and using an appropriate script to generate coherent expectations.",
+      "property": "understands(finalConfiguration, restaurantStory)",
+      "equivalentTo": "GenerateExpectationsMechanism"
+    }
+  ]
+}

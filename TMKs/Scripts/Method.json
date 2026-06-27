@@ -1,0 +1,162 @@
+{
+  "model": "Method",
+  "methods": [
+    {
+      "name": "ScriptUnderstandingSolution",
+      "description": "Main FSM for understanding a story using scripts.",
+      "inputParameters": [
+        "initialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "organizer": {
+        "startState": "S0",
+        "successState": "S4_Complete",
+        "failureState": "S_Fail",
+        "states": [
+          {
+            "name": "S0",
+            "goalInvocation": {
+              "goalReference": "IdentifySituation",
+              "type": "task",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "S1",
+            "goalInvocation": {
+              "goalReference": "SelectScript",
+              "type": "task",
+              "actualArguments": ["situation"]
+            }
+          },
+          {
+            "name": "S2",
+            "goalInvocation": {
+              "goalReference": "InstantiateScript",
+              "type": "task",
+              "actualArguments": ["script"]
+            }
+          },
+          {
+            "name": "S3",
+            "goalInvocation": {
+              "goalReference": "GenerateExpectations",
+              "type": "task",
+              "actualArguments": ["instantiatedScript"]
+            }
+          },
+          {
+            "name": "S4_Complete",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "S_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          { "sourceState": "S0", "targetState": "S1", "dataCondition": "!isEmpty(situation)" },
+          { "sourceState": "S0", "targetState": "S_Fail", "dataCondition": "isEmpty(situation)" },
+
+          { "sourceState": "S1", "targetState": "S2", "dataCondition": "!isEmpty(script)" },
+          { "sourceState": "S1", "targetState": "S_Fail", "dataCondition": "isEmpty(script)" },
+
+          { "sourceState": "S2", "targetState": "S3", "dataCondition": "!isEmpty(instantiatedScript)" },
+          { "sourceState": "S2", "targetState": "S_Fail", "dataCondition": "isEmpty(instantiatedScript)" },
+
+          { "sourceState": "S3", "targetState": "S4_Complete", "dataCondition": "!isEmpty(expectations)" },
+          { "sourceState": "S3", "targetState": "S_Fail", "dataCondition": "isEmpty(expectations)" }
+        ]
+      }
+    },
+
+    {
+      "name": "IdentifySituationMechanism",
+      "description": "Determine the stereotypical situation represented by a story.",
+      "inputParameters": ["initialConfiguration: configuration"],
+      "outputParameters": ["situation: situation"],
+      "organizer": {
+        "startState": "IS_S0",
+        "successState": "IS_Done",
+        "failureState": "IS_Fail",
+        "states": [
+          {
+            "name": "IS_S0",
+            "goalInvocation": {
+              "goalReference": "DetectSituation",
+              "type": "operation",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "IS_S1",
+            "goalInvocation": {
+              "goalReference": "ValidateSituation",
+              "type": "operation",
+              "actualArguments": ["situation"]
+            }
+          },
+          {
+            "name": "IS_Done",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "IS_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          { "sourceState": "IS_S0", "targetState": "IS_S1", "dataCondition": "!isEmpty(situation)" },
+          { "sourceState": "IS_S0", "targetState": "IS_Fail", "dataCondition": "isEmpty(situation)" },
+          { "sourceState": "IS_S1", "targetState": "IS_Done", "dataCondition": "!isEmpty(situation)" },
+          { "sourceState": "IS_S1", "targetState": "IS_Fail", "dataCondition": "isEmpty(situation)" }
+        ]
+      }
+    },
+
+    {
+      "name": "SelectScriptMechanism",
+      "description": "Retrieve a matching script from memory.",
+      "inputParameters": ["situation: situation"],
+      "outputParameters": ["script: script"],
+      "requires": "situationRecognized",
+      "provides": "scriptSelected"
+    },
+
+    {
+      "name": "InstantiateScriptMechanism",
+      "description": "Bind script roles, props, tracks, and scenes to a specific situation.",
+      "inputParameters": ["script: script"],
+      "outputParameters": ["instantiatedScript: script"],
+      "requires": "scriptSelected",
+      "provides": "scriptInstantiated"
+    },
+
+    {
+      "name": "GenerateExpectationsMechanism",
+      "description": "Generate expectations about future events and detect expectation violations.",
+      "inputParameters": ["instantiatedScript: script"],
+      "outputParameters": ["expectations: expectations"],
+      "requires": "scriptInstantiated",
+      "provides": "expectationsGenerated"
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "model": "Task",
+  "tasks": [
+    {
+      "name": "PerformMetaReasoning",
+      "description": "Reason about knowledge, reasoning, learning, and strategy use in order to detect mistakes, identify gaps, select or integrate strategies, and adapt to new goals.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "given": "metaReasoningProblem(initialConfiguration)",
+      "makes": "goodMetaReasoning(finalConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "MetaReasoningSolution",
+          "actualArguments": [
+            "initialConfiguration",
+            "knowledgeBase",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DetectMistake",
+      "description": "Reflect on knowledge, reasoning, or learning to identify errors.",
+      "inputParameters": [
+        "initialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "mistake: mistake"
+      ],
+      "means": [
+        {
+          "mechanismReference": "DetectMistakeMechanism",
+          "actualArguments": [
+            "initialConfiguration",
+            "mistake"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IdentifyKnowledgeGap",
+      "description": "Detect missing knowledge, reasoning, or learning requirements and formulate a learning goal.",
+      "inputParameters": [
+        "initialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "learningGoal: learningGoal"
+      ],
+      "means": [
+        {
+          "mechanismReference": "IdentifyKnowledgeGapMechanism",
+          "actualArguments": [
+            "initialConfiguration",
+            "learningGoal"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SelectStrategy",
+      "description": "Choose a reasoning or learning strategy based on available knowledge, efficiency, and solution quality.",
+      "inputParameters": [
+        "problem: problem"
+      ],
+      "outputParameters": [
+        "selectedStrategy: strategy"
+      ],
+      "means": [
+        {
+          "mechanismReference": "SelectStrategyMechanism",
+          "actualArguments": [
+            "problem",
+            "selectedStrategy"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IntegrateStrategies",
+      "description": "Combine or shift between multiple strategies as problem solving evolves.",
+      "inputParameters": [
+        "selectedStrategy: strategy"
+      ],
+      "outputParameters": [
+        "integratedStrategy: strategy"
+      ],
+      "means": [
+        {
+          "mechanismReference": "IntegrateStrategiesMechanism",
+          "actualArguments": [
+            "selectedStrategy",
+            "integratedStrategy"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AdaptToNewGoal",
+      "description": "Use goal-based autonomy to adapt reasoning and learning to a newly assigned goal.",
+      "inputParameters": [
+        "newGoal: goal"
+      ],
+      "outputParameters": [
+        "adaptedGoalState: goalState"
+      ],
+      "means": [
+        {
+          "mechanismReference": "AdaptToNewGoalMechanism",
+          "actualArguments": [
+            "newGoal",
+            "adaptedGoalState"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Complete",
+      "description": "Meta-reasoning process completed successfully.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    },
+    {
+      "name": "FailureGoal",
+      "description": "Meta-reasoning process failed.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    }
+  ]
+}

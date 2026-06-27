@@ -1,0 +1,122 @@
+{
+  "model": "Knowledge",
+  "concepts": [
+    {
+      "name": "organicCompound",
+      "description": "Organic structure to be named."
+    },
+    {
+      "name": "characteristicGroup",
+      "description": "Functional group with nomenclature seniority."
+    },
+    {
+      "name": "parentCompound",
+      "description": "Senior parent hydride or ring system."
+    },
+    {
+      "name": "substituent",
+      "description": "Prefix-cited group attached to parent."
+    },
+    {
+      "name": "locant",
+      "description": "Position identifier in a structure."
+    },
+    {
+      "name": "systematicName",
+      "description": "IUPAC systematic name."
+    },
+    {
+      "name": "configuration",
+      "description": "State of the naming process."
+    }
+  ],
+  "instances": [
+    {
+      "name": "initialConfiguration",
+      "concept": "configuration"
+    },
+    {
+      "name": "finalConfiguration",
+      "concept": "configuration"
+    },
+    {
+      "name": "carboxylicAcid",
+      "concept": "characteristicGroup"
+    },
+    {
+      "name": "aldehyde",
+      "concept": "characteristicGroup"
+    },
+    {
+      "name": "ketone",
+      "concept": "characteristicGroup"
+    },
+    {
+      "name": "alcohol",
+      "concept": "characteristicGroup"
+    },
+    {
+      "name": "amine",
+      "concept": "characteristicGroup"
+    },
+    {
+      "name": "heptane",
+      "concept": "parentCompound"
+    },
+    {
+      "name": "chloro",
+      "concept": "substituent"
+    },
+    {
+      "name": "exampleName_(4S,5E)-4,6-dichlorohept-5-en-2-one",
+      "concept": "systematicName"
+    }
+  ],
+  "relations": [
+    {
+      "name": "hasPrincipalGroup",
+      "domain": "organicCompound",
+      "range": "characteristicGroup"
+    },
+    {
+      "name": "hasParentCompound",
+      "domain": "organicCompound",
+      "range": "parentCompound"
+    },
+    {
+      "name": "hasSubstituent",
+      "domain": "organicCompound",
+      "range": "substituent"
+    },
+    {
+      "name": "hasLocant",
+      "domain": "substituent",
+      "range": "locant"
+    },
+    {
+      "name": "producesName",
+      "domain": "organicCompound",
+      "range": "systematicName"
+    }
+  ],
+  "triples": [
+    {
+      "instance1": "exampleName_(4S,5E)-4,6-dichlorohept-5-en-2-one",
+      "relation": "hasSubstituent",
+      "instance2": "chloro"
+    },
+    {
+      "instance1": "exampleName_(4S,5E)-4,6-dichlorohept-5-en-2-one",
+      "relation": "hasParentCompound",
+      "instance2": "heptane"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "goodNomenclature",
+      "description": "The final name correctly reflects principal characteristic group, parent compound, substituents, locants and stereodescriptors according to IUPAC naming order.",
+      "property": "systematicNameCorrect",
+      "equivalentTo": "ConstructSystematicNameMechanism"
+    }
+  ]
+}

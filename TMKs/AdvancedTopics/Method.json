@@ -1,0 +1,170 @@
+{
+  "model": "Method",
+  "methods": [
+    {
+      "name": "AdvancedTopicsSolution",
+      "description": "Main FSM for analyzing advanced KBAI topics.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "organizer": {
+        "startState": "S0",
+        "successState": "S4_Complete",
+        "failureState": "S_Fail",
+        "states": [
+          {
+            "name": "S0",
+            "goalInvocation": {
+              "goalReference": "PerformVisuospatialReasoning",
+              "type": "task",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "S1",
+            "goalInvocation": {
+              "goalReference": "PerformSystemsThinking",
+              "type": "task",
+              "actualArguments": ["visuospatialConfiguration"]
+            }
+          },
+          {
+            "name": "S2",
+            "goalInvocation": {
+              "goalReference": "PerformDesignThinking",
+              "type": "task",
+              "actualArguments": ["systemsConfiguration"]
+            }
+          },
+          {
+            "name": "S3",
+            "goalInvocation": {
+              "goalReference": "EvaluateCreativity",
+              "type": "task",
+              "actualArguments": ["designConfiguration"]
+            }
+          },
+          {
+            "name": "S4_Complete",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "S_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          { "sourceState": "S0", "targetState": "S1", "dataCondition": "!isEmpty(visuospatialConfiguration)" },
+          { "sourceState": "S1", "targetState": "S2", "dataCondition": "!isEmpty(systemsConfiguration)" },
+          { "sourceState": "S2", "targetState": "S3", "dataCondition": "!isEmpty(designConfiguration)" },
+          { "sourceState": "S3", "targetState": "S4_Complete", "dataCondition": "goodAdvancedAnalysis(finalConfiguration)" }
+        ]
+      }
+    },
+
+    {
+      "name": "PerformVisuospatialReasoningMechanism",
+      "description": "Analyze visual and spatial information.",
+      "inputParameters": ["initialConfiguration: configuration"],
+      "outputParameters": ["visuospatialConfiguration: configuration"],
+      "requires": "initialConfiguration available",
+      "provides": "visuospatialConfiguration",
+      "organizer": {
+        "startState": "VR_S0",
+        "successState": "VR_Done",
+        "failureState": "VR_Fail",
+        "states": [
+          {
+            "name": "VR_S0",
+            "goalInvocation": {
+              "goalReference": "IdentifyVisuospatialKnowledge",
+              "type": "operation",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "VR_S1",
+            "goalInvocation": {
+              "goalReference": "ValidateVisuospatialKnowledge",
+              "type": "operation",
+              "actualArguments": ["visuospatialConfiguration"]
+            }
+          },
+          {
+            "name": "VR_Done",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "VR_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          { "sourceState": "VR_S0", "targetState": "VR_S1", "dataCondition": "!isEmpty(visuospatialConfiguration)" },
+          { "sourceState": "VR_S1", "targetState": "VR_Done", "dataCondition": "!isEmpty(visuospatialConfiguration)" }
+        ]
+      }
+    },
+
+    {
+      "name": "PerformSystemsThinkingMechanism",
+      "description": "Infer structure, behavior and function.",
+      "inputParameters": ["visuospatialConfiguration: configuration"],
+      "outputParameters": ["systemsConfiguration: configuration"],
+      "requires": "visuospatialConfiguration available",
+      "provides": "systemsConfiguration"
+    },
+
+    {
+      "name": "PerformDesignThinkingMechanism",
+      "description": "Perform problem-solution coevolution for design.",
+      "inputParameters": ["systemsConfiguration: configuration"],
+      "outputParameters": ["designConfiguration: configuration"],
+      "requires": "systemsConfiguration available",
+      "provides": "designConfiguration"
+    },
+
+    {
+      "name": "EvaluateCreativityMechanism",
+      "description": "Evaluate novelty, non-obviousness and desirability.",
+      "inputParameters": ["designConfiguration: configuration"],
+      "outputParameters": ["finalConfiguration: configuration"],
+      "requires": "designConfiguration available",
+      "provides": "goodAdvancedAnalysis(finalConfiguration)"
+    },
+
+    {
+      "name": "IdentifyVisuospatialKnowledge",
+      "description": "Identify visual and spatial components.",
+      "inputParameters": ["initialConfiguration: configuration"],
+      "outputParameters": ["visuospatialConfiguration: configuration"]
+    },
+
+    {
+      "name": "ValidateVisuospatialKnowledge",
+      "description": "Validate extracted visuospatial representation.",
+      "inputParameters": ["visuospatialConfiguration: configuration"],
+      "outputParameters": ["visuospatialConfiguration: configuration"]
+    }
+  ]
+}

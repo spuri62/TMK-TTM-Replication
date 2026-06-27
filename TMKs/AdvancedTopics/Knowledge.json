@@ -1,0 +1,118 @@
+{
+  "model": "Knowledge",
+  "concepts": [
+    {
+      "name": "visuospatialKnowledge",
+      "description": "Knowledge containing visual what-information and spatial where-information."
+    },
+    {
+      "name": "propositionalRepresentation",
+      "description": "Representation divorced from perceptual modality."
+    },
+    {
+      "name": "analogicalRepresentation",
+      "description": "Representation with structural correspondence to the external world."
+    },
+    {
+      "name": "system",
+      "description": "Collection of heterogeneous interacting components."
+    },
+    {
+      "name": "structure",
+      "description": "Visible organization of components."
+    },
+    {
+      "name": "behavior",
+      "description": "Invisible causal processes."
+    },
+    {
+      "name": "function",
+      "description": "Purpose served by a system."
+    },
+    {
+      "name": "designProblem",
+      "description": "Ill-defined and open-ended problem."
+    },
+    {
+      "name": "creativeProduct",
+      "description": "Non-obvious and desirable outcome."
+    },
+    {
+      "name": "configuration",
+      "description": "State of analysis."
+    }
+  ],
+  "instances": [
+    {
+      "name": "DunckerTumorProblem",
+      "concept": "visuospatialKnowledge"
+    },
+    {
+      "name": "Galatea",
+      "concept": "analogicalRepresentation"
+    },
+    {
+      "name": "Archytas",
+      "concept": "system"
+    },
+    {
+      "name": "FlashlightSBF",
+      "concept": "function"
+    },
+    {
+      "name": "initialConfiguration",
+      "concept": "configuration"
+    },
+    {
+      "name": "finalConfiguration",
+      "concept": "configuration"
+    }
+  ],
+  "relations": [
+    {
+      "name": "usesRepresentation",
+      "domain": "visuospatialKnowledge",
+      "range": "analogicalRepresentation"
+    },
+    {
+      "name": "hasStructure",
+      "domain": "system",
+      "range": "structure"
+    },
+    {
+      "name": "hasBehavior",
+      "domain": "system",
+      "range": "behavior"
+    },
+    {
+      "name": "hasFunction",
+      "domain": "system",
+      "range": "function"
+    },
+    {
+      "name": "produces",
+      "domain": "designProblem",
+      "range": "creativeProduct"
+    }
+  ],
+  "triples": [
+    {
+      "instance1": "DunckerTumorProblem",
+      "relation": "usesRepresentation",
+      "instance2": "Galatea"
+    },
+    {
+      "instance1": "Archytas",
+      "relation": "hasFunction",
+      "instance2": "FlashlightSBF"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "goodAdvancedAnalysis",
+      "description": "The analysis correctly integrates visuospatial reasoning, systems thinking, design thinking, and creativity.",
+      "property": "finalConfiguration contains validated visuospatial, systems, design and creativity analyses",
+      "equivalentTo": "AnalyzeAdvancedKBAITopic"
+    }
+  ]
+}

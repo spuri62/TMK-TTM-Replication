@@ -1,0 +1,140 @@
+{
+  "model": "Method",
+  "methods": [
+    {
+      "name": "IUPACNomenclatureSolution",
+      "description": "Main FSM for systematic IUPAC naming following the Blue Book sequence.",
+      "inputParameters": [
+        "initialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "organizer": {
+        "startState": "S0",
+        "successState": "S4",
+        "failureState": "Fail",
+        "states": [
+          {
+            "name": "S0",
+            "goalInvocation": {
+              "goalReference": "IdentifyPrincipalCharacteristicGroup",
+              "type": "task",
+              "actualArguments": [
+                "initialConfiguration"
+              ]
+            }
+          },
+          {
+            "name": "S1",
+            "goalInvocation": {
+              "goalReference": "SelectParentCompound",
+              "type": "task",
+              "actualArguments": [
+                "groupConfiguration"
+              ]
+            }
+          },
+          {
+            "name": "S2",
+            "goalInvocation": {
+              "goalReference": "AssignSubstituentsAndLocants",
+              "type": "task",
+              "actualArguments": [
+                "parentConfiguration"
+              ]
+            }
+          },
+          {
+            "name": "S3",
+            "goalInvocation": {
+              "goalReference": "ConstructSystematicName",
+              "type": "task",
+              "actualArguments": [
+                "substituentConfiguration"
+              ]
+            }
+          },
+          {
+            "name": "S4",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "sourceState": "S0",
+            "targetState": "S1",
+            "dataCondition": "!isEmpty(groupConfiguration)"
+          },
+          {
+            "sourceState": "S1",
+            "targetState": "S2",
+            "dataCondition": "!isEmpty(parentConfiguration)"
+          },
+          {
+            "sourceState": "S2",
+            "targetState": "S3",
+            "dataCondition": "!isEmpty(substituentConfiguration)"
+          },
+          {
+            "sourceState": "S3",
+            "targetState": "S4",
+            "dataCondition": "goodNomenclature(finalConfiguration)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IdentifyPrincipalCharacteristicGroupMechanism",
+      "description": "Determine highest seniority functional group.",
+      "inputParameters": [
+        "initialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "groupConfiguration: configuration"
+      ]
+    },
+    {
+      "name": "SelectParentCompoundMechanism",
+      "description": "Choose senior parent hydride and specify unsaturation.",
+      "inputParameters": [
+        "groupConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "parentConfiguration: configuration"
+      ]
+    },
+    {
+      "name": "AssignSubstituentsAndLocantsMechanism",
+      "description": "Assign prefixes, multiplicative prefixes, alphabetical order and locants.",
+      "inputParameters": [
+        "parentConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "substituentConfiguration: configuration"
+      ]
+    },
+    {
+      "name": "ConstructSystematicNameMechanism",
+      "description": "Combine parent, suffix, prefixes, locants and stereodescriptors into final name.",
+      "inputParameters": [
+        "substituentConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ]
+    }
+  ]
+}

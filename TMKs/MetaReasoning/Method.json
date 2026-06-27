@@ -1,0 +1,262 @@
+{
+  "model": "Method",
+  "methods": [
+    {
+      "name": "MetaReasoningSolution",
+      "description": "Top-level FSM for meta-reasoning.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "organizer": {
+        "startState": "MR_S0",
+        "successState": "MR_Done",
+        "failureState": "MR_Fail",
+        "states": [
+          {
+            "name": "MR_S0",
+            "goalInvocation": {
+              "goalReference": "DetectMistake",
+              "type": "task",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "MR_S1",
+            "goalInvocation": {
+              "goalReference": "IdentifyKnowledgeGap",
+              "type": "task",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "MR_S2",
+            "goalInvocation": {
+              "goalReference": "SelectStrategy",
+              "type": "task",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "MR_S3",
+            "goalInvocation": {
+              "goalReference": "IntegrateStrategies",
+              "type": "task",
+              "actualArguments": ["selectedStrategy"]
+            }
+          },
+          {
+            "name": "MR_S4",
+            "goalInvocation": {
+              "goalReference": "AdaptToNewGoal",
+              "type": "task",
+              "actualArguments": ["newGoal"]
+            }
+          },
+          {
+            "name": "MR_Done",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "MR_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          { "sourceState": "MR_S0", "targetState": "MR_S1", "dataCondition": "!isEmpty(mistake)" },
+          { "sourceState": "MR_S0", "targetState": "MR_Fail", "dataCondition": "isEmpty(mistake)" },
+
+          { "sourceState": "MR_S1", "targetState": "MR_S2", "dataCondition": "!isEmpty(learningGoal)" },
+          { "sourceState": "MR_S1", "targetState": "MR_Fail", "dataCondition": "isEmpty(learningGoal)" },
+
+          { "sourceState": "MR_S2", "targetState": "MR_S3", "dataCondition": "!isEmpty(selectedStrategy)" },
+          { "sourceState": "MR_S2", "targetState": "MR_Fail", "dataCondition": "isEmpty(selectedStrategy)" },
+
+          { "sourceState": "MR_S3", "targetState": "MR_S4", "dataCondition": "!isEmpty(integratedStrategy)" },
+          { "sourceState": "MR_S3", "targetState": "MR_Fail", "dataCondition": "isEmpty(integratedStrategy)" },
+
+          { "sourceState": "MR_S4", "targetState": "MR_Done", "dataCondition": "goalAdapted(adaptedGoalState)" },
+          { "sourceState": "MR_S4", "targetState": "MR_Fail", "dataCondition": "!goalAdapted(adaptedGoalState)" }
+        ]
+      }
+    },
+
+    {
+      "name": "DetectMistakeMechanism",
+      "description": "Detect errors in knowledge, reasoning, or learning.",
+      "inputParameters": ["initialConfiguration: configuration"],
+      "outputParameters": ["mistake: mistake"],
+      "organizer": {
+        "startState": "DM_S0",
+        "successState": "DM_Done",
+        "failureState": "DM_Fail",
+        "states": [
+          {
+            "name": "DM_S0",
+            "goalInvocation": {
+              "goalReference": "ReflectOnKnowledge",
+              "type": "operation",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "DM_S1",
+            "goalInvocation": {
+              "goalReference": "ValidateMistake",
+              "type": "operation",
+              "actualArguments": ["mistake"]
+            }
+          },
+          {
+            "name": "DM_Done",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "DM_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          { "sourceState": "DM_S0", "targetState": "DM_S1", "dataCondition": "!isEmpty(mistake)" },
+          { "sourceState": "DM_S0", "targetState": "DM_Fail", "dataCondition": "isEmpty(mistake)" },
+          { "sourceState": "DM_S1", "targetState": "DM_Done", "dataCondition": "mistakeDetected(mistake)" },
+          { "sourceState": "DM_S1", "targetState": "DM_Fail", "dataCondition": "!mistakeDetected(mistake)" }
+        ]
+      }
+    },
+
+    {
+      "name": "IdentifyKnowledgeGapMechanism",
+      "description": "Identify a gap and spawn a learning goal.",
+      "inputParameters": ["initialConfiguration: configuration"],
+      "outputParameters": ["learningGoal: learningGoal"],
+      "organizer": {
+        "startState": "KG_S0",
+        "successState": "KG_Done",
+        "failureState": "KG_Fail",
+        "states": [
+          {
+            "name": "KG_S0",
+            "goalInvocation": {
+              "goalReference": "DetectGap",
+              "type": "operation",
+              "actualArguments": ["initialConfiguration"]
+            }
+          },
+          {
+            "name": "KG_S1",
+            "goalInvocation": {
+              "goalReference": "SpawnLearningGoal",
+              "type": "operation",
+              "actualArguments": ["gap"]
+            }
+          },
+          {
+            "name": "KG_Done",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "KG_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          { "sourceState": "KG_S0", "targetState": "KG_S1", "dataCondition": "!isEmpty(gap)" },
+          { "sourceState": "KG_S0", "targetState": "KG_Fail", "dataCondition": "isEmpty(gap)" },
+          { "sourceState": "KG_S1", "targetState": "KG_Done", "dataCondition": "!isEmpty(learningGoal)" },
+          { "sourceState": "KG_S1", "targetState": "KG_Fail", "dataCondition": "isEmpty(learningGoal)" }
+        ]
+      }
+    },
+
+    {
+      "name": "SelectStrategyMechanism",
+      "description": "Choose a strategy based on knowledge availability, computational efficiency, and solution quality.",
+      "inputParameters": ["problem: problem"],
+      "outputParameters": ["selectedStrategy: strategy"],
+      "requires": "problemAvailable(problem)",
+      "provides": "strategySelected(selectedStrategy)"
+    },
+
+    {
+      "name": "IntegrateStrategiesMechanism",
+      "description": "Shift among strategies and combine them during problem solving.",
+      "inputParameters": ["selectedStrategy: strategy"],
+      "outputParameters": ["integratedStrategy: strategy"],
+      "requires": "strategySelected(selectedStrategy)",
+      "provides": "strategyIntegrated(integratedStrategy)"
+    },
+
+    {
+      "name": "AdaptToNewGoalMechanism",
+      "description": "Adapt reasoning and learning methods to a newly assigned goal.",
+      "inputParameters": ["newGoal: goal"],
+      "outputParameters": ["adaptedGoalState: goalState"],
+      "requires": "newGoalAssigned(newGoal)",
+      "provides": "goalAdapted(adaptedGoalState)"
+    },
+
+    {
+      "name": "ReflectOnKnowledge",
+      "description": "Reflect on knowledge, reasoning, or learning to identify an error.",
+      "inputParameters": ["initialConfiguration: configuration"],
+      "outputParameters": ["mistake: mistake"],
+      "requires": "reflectionNeeded(initialConfiguration)",
+      "provides": "mistakeDetected(mistake)"
+    },
+
+    {
+      "name": "ValidateMistake",
+      "description": "Validate that a detected mistake explains the failure.",
+      "inputParameters": ["mistake: mistake"],
+      "outputParameters": ["validatedMistake: mistake"],
+      "requires": "!isEmpty(mistake)",
+      "provides": "mistakeDetected(validatedMistake)"
+    },
+
+    {
+      "name": "DetectGap",
+      "description": "Detect missing knowledge or reasoning links.",
+      "inputParameters": ["initialConfiguration: configuration"],
+      "outputParameters": ["gap: knowledgeGap"],
+      "requires": "reflectionNeeded(initialConfiguration)",
+      "provides": "!isEmpty(gap)"
+    },
+
+    {
+      "name": "SpawnLearningGoal",
+      "description": "Create a learning goal to acquire missing knowledge.",
+      "inputParameters": ["gap: knowledgeGap"],
+      "outputParameters": ["learningGoal: learningGoal"],
+      "requires": "!isEmpty(gap)",
+      "provides": "!isEmpty(learningGoal)"
+    }
+  ]
+}

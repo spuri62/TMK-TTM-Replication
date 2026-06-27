@@ -1,0 +1,117 @@
+{
+  "model": "Task",
+  "tasks": [
+    {
+      "name": "NameOrganicCompound",
+      "description": "Generate a systematic IUPAC name for an organic compound.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "given": "structureAvailable(initialConfiguration)",
+      "makes": "goodNomenclature(finalConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "IUPACNomenclatureSolution",
+          "actualArguments": [
+            "initialConfiguration",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IdentifyPrincipalCharacteristicGroup",
+      "description": "Determine the principal characteristic group and suffix.",
+      "inputParameters": [
+        "initialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "groupConfiguration: configuration"
+      ],
+      "means": [
+        {
+          "mechanismReference": "IdentifyPrincipalCharacteristicGroupMechanism",
+          "actualArguments": [
+            "initialConfiguration",
+            "groupConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SelectParentCompound",
+      "description": "Determine the senior parent compound.",
+      "inputParameters": [
+        "groupConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "parentConfiguration: configuration"
+      ],
+      "means": [
+        {
+          "mechanismReference": "SelectParentCompoundMechanism",
+          "actualArguments": [
+            "groupConfiguration",
+            "parentConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AssignSubstituentsAndLocants",
+      "description": "Identify substituents, multiplicative prefixes and locants.",
+      "inputParameters": [
+        "parentConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "substituentConfiguration: configuration"
+      ],
+      "means": [
+        {
+          "mechanismReference": "AssignSubstituentsAndLocantsMechanism",
+          "actualArguments": [
+            "parentConfiguration",
+            "substituentConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ConstructSystematicName",
+      "description": "Assemble the complete systematic name including stereodescriptors if present.",
+      "inputParameters": [
+        "substituentConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "means": [
+        {
+          "mechanismReference": "ConstructSystematicNameMechanism",
+          "actualArguments": [
+            "substituentConfiguration",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FailureGoal",
+      "description": "Naming process failed.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    },
+    {
+      "name": "Complete",
+      "description": "Naming process completed.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    }
+  ]
+}

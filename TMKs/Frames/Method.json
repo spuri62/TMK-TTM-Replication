@@ -1,0 +1,242 @@
+{
+  "model": "Method",
+  "methods": [
+    {
+      "name": "FrameUnderstandingSolution",
+      "description": "Main FSM for understanding a sentence using frames.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "organizer": {
+        "startState": "S0",
+        "successState": "S4_Complete",
+        "failureState": "S_Fail",
+        "states": [
+          {
+            "name": "S0",
+            "goalInvocation": {
+              "goalReference": "IdentifyFrame",
+              "type": "task",
+              "actualArguments": [
+                "sentence"
+              ]
+            }
+          },
+          {
+            "name": "S1",
+            "goalInvocation": {
+              "goalReference": "FillSlots",
+              "type": "task",
+              "actualArguments": [
+                "frame",
+                "sentence"
+              ]
+            }
+          },
+          {
+            "name": "S2",
+            "goalInvocation": {
+              "goalReference": "ApplyDefaults",
+              "type": "task",
+              "actualArguments": [
+                "filledFrame"
+              ]
+            }
+          },
+          {
+            "name": "S3",
+            "goalInvocation": {
+              "goalReference": "MakeInferences",
+              "type": "task",
+              "actualArguments": [
+                "completedFrame"
+              ]
+            }
+          },
+          {
+            "name": "S4_Complete",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "S_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "sourceState": "S0",
+            "targetState": "S1",
+            "dataCondition": "!isEmpty(frame)"
+          },
+          {
+            "sourceState": "S1",
+            "targetState": "S2",
+            "dataCondition": "!isEmpty(filledFrame)"
+          },
+          {
+            "sourceState": "S2",
+            "targetState": "S3",
+            "dataCondition": "!isEmpty(completedFrame)"
+          },
+          {
+            "sourceState": "S3",
+            "targetState": "S4_Complete",
+            "dataCondition": "goodFrameInterpretation(finalConfiguration)"
+          }
+        ]
+      }
+    },
+
+    {
+      "name": "IdentifyFrameMechanism",
+      "description": "Select the frame corresponding to the action or concept in the sentence.",
+      "inputParameters": ["sentence: sentence"],
+      "outputParameters": ["frame: frame"],
+      "organizer": {
+        "startState": "IF_S0",
+        "successState": "IF_Done",
+        "failureState": "IF_Fail",
+        "states": [
+          {
+            "name": "IF_S0",
+            "goalInvocation": {
+              "goalReference": "ExtractAction",
+              "type": "operation",
+              "actualArguments": ["sentence"]
+            }
+          },
+          {
+            "name": "IF_S1",
+            "goalInvocation": {
+              "goalReference": "ValidateFrame",
+              "type": "operation",
+              "actualArguments": ["frame"]
+            }
+          },
+          {
+            "name": "IF_Done",
+            "goalInvocation": {
+              "goalReference": "OutputFrame",
+              "type": "operation",
+              "actualArguments": ["frame"]
+            }
+          },
+          {
+            "name": "IF_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          {"sourceState":"IF_S0","targetState":"IF_S1","dataCondition":"!isEmpty(frame)"},
+          {"sourceState":"IF_S1","targetState":"IF_Done","dataCondition":"frameSelected(frame)"},
+          {"sourceState":"IF_S0","targetState":"IF_Fail","dataCondition":"isEmpty(frame)"},
+          {"sourceState":"IF_S1","targetState":"IF_Fail","dataCondition":"!frameSelected(frame)"}
+        ]
+      }
+    },
+
+    {
+      "name": "FillSlotsMechanism",
+      "description": "Populate frame slots from sentence information.",
+      "inputParameters": ["frame: frame","sentence: sentence"],
+      "outputParameters": ["filledFrame: frame"],
+      "organizer": {
+        "startState": "FS_S0",
+        "successState": "FS_Done",
+        "failureState": "FS_Fail",
+        "states": [
+          {
+            "name": "FS_S0",
+            "goalInvocation": {
+              "goalReference": "AssignSentenceFillers",
+              "type": "operation",
+              "actualArguments": ["frame","sentence"]
+            }
+          },
+          {
+            "name": "FS_S1",
+            "goalInvocation": {
+              "goalReference": "ValidateFilledSlots",
+              "type": "operation",
+              "actualArguments": ["filledFrame"]
+            }
+          },
+          {
+            "name": "FS_Done",
+            "goalInvocation": {
+              "goalReference": "OutputFilledFrame",
+              "type": "operation",
+              "actualArguments": ["filledFrame"]
+            }
+          },
+          {
+            "name": "FS_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          {"sourceState":"FS_S0","targetState":"FS_S1","dataCondition":"!isEmpty(filledFrame)"},
+          {"sourceState":"FS_S1","targetState":"FS_Done","dataCondition":"slotsFilled(filledFrame)"},
+          {"sourceState":"FS_S0","targetState":"FS_Fail","dataCondition":"isEmpty(filledFrame)"},
+          {"sourceState":"FS_S1","targetState":"FS_Fail","dataCondition":"!slotsFilled(filledFrame)"}
+        ]
+      }
+    },
+
+    {
+      "name": "ApplyDefaultsMechanism",
+      "description": "Apply stereotype-based default fillers.",
+      "inputParameters": ["filledFrame: frame"],
+      "outputParameters": ["completedFrame: frame"],
+      "requires": "slotsFilled(filledFrame)",
+      "provides": "defaultsApplied(completedFrame)"
+    },
+
+    {
+      "name": "MakeInferencesMechanism",
+      "description": "Generate common-sense inferences from frame contents.",
+      "inputParameters": ["completedFrame: frame"],
+      "outputParameters": ["finalConfiguration: configuration"],
+      "requires": "defaultsApplied(completedFrame)",
+      "provides": "goodFrameInterpretation(finalConfiguration)"
+    },
+
+    {
+      "name": "ExtractAction",
+      "description": "Extract the main action associated with a frame.",
+      "inputParameters": ["sentence: sentence"],
+      "outputParameters": ["frame: frame"],
+      "requires": "containsAction(sentence)",
+      "provides": "frameSelected(frame)"
+    },
+
+    {
+      "name": "AssignSentenceFillers",
+      "description": "Assign fillers from sentence content into frame slots.",
+      "inputParameters": ["frame: frame","sentence: sentence"],
+      "outputParameters": ["filledFrame: frame"],
+      "requires": "frameSelected(frame)",
+      "provides": "slotsFilled(filledFrame)"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "model": "Knowledge",
+  "concepts": [
+    {
+      "name": "frame",
+      "description": "Knowledge structure containing slots and fillers representing a stereotypical situation."
+    },
+    {
+      "name": "slot",
+      "description": "Attribute associated with a frame."
+    },
+    {
+      "name": "filler",
+      "description": "Value assigned to a slot."
+    },
+    {
+      "name": "stereotype",
+      "description": "Typical knowledge associated with a situation."
+    },
+    {
+      "name": "sentence",
+      "description": "Natural language input interpreted using frames."
+    },
+    {
+      "name": "configuration",
+      "description": "State of frame interpretation before or after inference."
+    },
+    {
+      "name": "inference",
+      "description": "Common-sense conclusion derived from a frame."
+    }
+  ],
+
+  "instances": [
+    {
+      "name": "ateFrame",
+      "concept": "frame"
+    },
+    {
+      "name": "subjectSlot",
+      "concept": "slot"
+    },
+    {
+      "name": "objectSlot",
+      "concept": "slot"
+    },
+    {
+      "name": "locationSlot",
+      "concept": "slot"
+    },
+    {
+      "name": "timeSlot",
+      "concept": "slot"
+    },
+    {
+      "name": "utensilSlot",
+      "concept": "slot"
+    },
+    {
+      "name": "objectAliveSlot",
+      "concept": "slot"
+    },
+    {
+      "name": "objectLocationSlot",
+      "concept": "slot"
+    },
+    {
+      "name": "subjectMoodSlot",
+      "concept": "slot"
+    },
+    {
+      "name": "AshokAteAFrog",
+      "concept": "sentence"
+    },
+    {
+      "name": "DavidAteAPizzaAtHome",
+      "concept": "sentence"
+    },
+    {
+      "name": "AngelaAteLasagnaAtOliveGardenWithHerDad",
+      "concept": "sentence"
+    },
+    {
+      "name": "initialConfiguration",
+      "concept": "configuration"
+    },
+    {
+      "name": "finalConfiguration",
+      "concept": "configuration"
+    }
+  ],
+
+  "relations": [
+    {
+      "name": "hasSlot",
+      "domain": "frame",
+      "range": "slot"
+    },
+    {
+      "name": "usesFrame",
+      "domain": "sentence",
+      "range": "frame"
+    },
+    {
+      "name": "supportsInference",
+      "domain": "frame",
+      "range": "inference"
+    }
+  ],
+
+  "triples": [
+    {
+      "instance1": "ateFrame",
+      "relation": "hasSlot",
+      "instance2": "subjectSlot"
+    },
+    {
+      "instance1": "ateFrame",
+      "relation": "hasSlot",
+      "instance2": "objectSlot"
+    },
+    {
+      "instance1": "ateFrame",
+      "relation": "hasSlot",
+      "instance2": "locationSlot"
+    },
+    {
+      "instance1": "ateFrame",
+      "relation": "hasSlot",
+      "instance2": "timeSlot"
+    },
+    {
+      "instance1": "ateFrame",
+      "relation": "hasSlot",
+      "instance2": "utensilSlot"
+    },
+    {
+      "instance1": "AshokAteAFrog",
+      "relation": "usesFrame",
+      "instance2": "ateFrame"
+    }
+  ],
+
+  "assertions": [
+    {
+      "name": "goodFrameInterpretation",
+      "description": "A sentence has been interpreted by identifying a frame, filling slots, applying defaults, and generating common-sense inferences.",
+      "property": "frameSelected AND slotsFilled AND defaultsApplied AND inferenceGenerated",
+      "equivalentTo": "MakeInferencesMechanism"
+    }
+  ]
+}

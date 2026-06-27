@@ -1,0 +1,167 @@
+{
+  "model": "Method",
+  "methods": [
+    {
+      "name": "FormalLogicSolution",
+      "description": "Main FSM for reasoning with formal logic.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "organizer": {
+        "startState": "FL_S0",
+        "successState": "FL_Done",
+        "failureState": "FL_Fail",
+        "states": [
+          {
+            "name": "FL_S0",
+            "goalInvocation": {
+              "goalReference": "RepresentKnowledgeInLogic",
+              "type": "task",
+              "actualArguments": [
+                "initialConfiguration",
+                "knowledgeBase"
+              ]
+            }
+          },
+          {
+            "name": "FL_S1",
+            "goalInvocation": {
+              "goalReference": "EvaluateTruthValues",
+              "type": "task",
+              "actualArguments": [
+                "logicalSentences"
+              ]
+            }
+          },
+          {
+            "name": "FL_S2",
+            "goalInvocation": {
+              "goalReference": "ApplyRulesOfInference",
+              "type": "task",
+              "actualArguments": [
+                "evaluatedSentences"
+              ]
+            }
+          },
+          {
+            "name": "FL_S3",
+            "goalInvocation": {
+              "goalReference": "ProveByResolution",
+              "type": "task",
+              "actualArguments": [
+                "inferredSentences"
+              ]
+            }
+          },
+          {
+            "name": "FL_Done",
+            "goalInvocation": {
+              "goalReference": "Complete",
+              "type": "task",
+              "actualArguments": []
+            }
+          },
+          {
+            "name": "FL_Fail",
+            "goalInvocation": {
+              "goalReference": "FailureGoal",
+              "type": "task",
+              "actualArguments": []
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "sourceState": "FL_S0",
+            "targetState": "FL_S1",
+            "dataCondition": "logicalRepresentationCreated(logicalSentences)"
+          },
+          {
+            "sourceState": "FL_S1",
+            "targetState": "FL_S2",
+            "dataCondition": "truthValuesComputed(evaluatedSentences)"
+          },
+          {
+            "sourceState": "FL_S2",
+            "targetState": "FL_S3",
+            "dataCondition": "inferencesDerived(inferredSentences)"
+          },
+          {
+            "sourceState": "FL_S3",
+            "targetState": "FL_Done",
+            "dataCondition": "proofConstructed(finalConfiguration)"
+          },
+          {
+            "sourceState": "FL_S0",
+            "targetState": "FL_Fail",
+            "dataCondition": "!logicalRepresentationCreated(logicalSentences)"
+          },
+          {
+            "sourceState": "FL_S1",
+            "targetState": "FL_Fail",
+            "dataCondition": "!truthValuesComputed(evaluatedSentences)"
+          },
+          {
+            "sourceState": "FL_S2",
+            "targetState": "FL_Fail",
+            "dataCondition": "!inferencesDerived(inferredSentences)"
+          },
+          {
+            "sourceState": "FL_S3",
+            "targetState": "FL_Fail",
+            "dataCondition": "!proofConstructed(finalConfiguration)"
+          }
+        ]
+      }
+    },
+
+    {
+      "name": "RepresentKnowledgeMechanism",
+      "description": "Construct logical sentences from predicates and operators.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "logicalSentences: configuration"
+      ]
+    },
+
+    {
+      "name": "TruthTableMechanism",
+      "description": "Compute truth values using truth tables and logical properties including commutative, distributive, associative, and De Morgan's laws.",
+      "inputParameters": [
+        "logicalSentences: configuration"
+      ],
+      "outputParameters": [
+        "evaluatedSentences: configuration"
+      ]
+    },
+
+    {
+      "name": "InferenceMechanism",
+      "description": "Apply modus ponens and modus tollens to derive valid conclusions.",
+      "inputParameters": [
+        "evaluatedSentences: configuration"
+      ],
+      "outputParameters": [
+        "inferredSentences: configuration"
+      ]
+    },
+
+    {
+      "name": "ResolutionMechanism",
+      "description": "Eliminate implications, convert sentences to conjunctive normal form, add negated goal, and resolve until contradiction or failure.",
+      "inputParameters": [
+        "inferredSentences: configuration"
+      ],
+      "outputParameters": [
+        "proofConfiguration: configuration"
+      ]
+    }
+  ]
+}

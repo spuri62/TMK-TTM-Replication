@@ -1,0 +1,134 @@
+{
+  "model": "Knowledge",
+  "concepts": [
+    {
+      "name": "predicate",
+      "description": "Function that maps object arguments to true or false."
+    },
+    {
+      "name": "logicalSentence",
+      "description": "Sentence represented in formal logic."
+    },
+    {
+      "name": "implication",
+      "description": "Logical relationship where antecedent implies consequent."
+    },
+    {
+      "name": "conjunction",
+      "description": "Logical AND."
+    },
+    {
+      "name": "disjunction",
+      "description": "Logical OR."
+    },
+    {
+      "name": "negation",
+      "description": "Logical NOT."
+    },
+    {
+      "name": "truthTable",
+      "description": "Mechanism for evaluating truth values."
+    },
+    {
+      "name": "ruleOfInference",
+      "description": "Rule used to derive valid conclusions."
+    },
+    {
+      "name": "resolutionProof",
+      "description": "Proof by refutation using resolution."
+    },
+    {
+      "name": "configuration",
+      "description": "State of logical reasoning."
+    }
+  ],
+  "instances": [
+    {
+      "name": "bluebird",
+      "concept": "predicate"
+    },
+    {
+      "name": "animalHasFeathersImpliesBird",
+      "concept": "logicalSentence"
+    },
+    {
+      "name": "animalLaysEggsAndFliesImpliesBird",
+      "concept": "logicalSentence"
+    },
+    {
+      "name": "animalFliesAndNotBirdImpliesBat",
+      "concept": "logicalSentence"
+    },
+    {
+      "name": "modusPonens",
+      "concept": "ruleOfInference"
+    },
+    {
+      "name": "modusTollens",
+      "concept": "ruleOfInference"
+    },
+    {
+      "name": "deMorgansLaw",
+      "concept": "ruleOfInference"
+    },
+    {
+      "name": "resolutionTheoremProving",
+      "concept": "resolutionProof"
+    },
+    {
+      "name": "initialConfiguration",
+      "concept": "configuration"
+    },
+    {
+      "name": "finalConfiguration",
+      "concept": "configuration"
+    }
+  ],
+  "relations": [
+    {
+      "name": "usesPredicate",
+      "domain": "logicalSentence",
+      "range": "predicate"
+    },
+    {
+      "name": "evaluatedBy",
+      "domain": "logicalSentence",
+      "range": "truthTable"
+    },
+    {
+      "name": "derivedBy",
+      "domain": "logicalSentence",
+      "range": "ruleOfInference"
+    },
+    {
+      "name": "provedBy",
+      "domain": "logicalSentence",
+      "range": "resolutionProof"
+    }
+  ],
+  "triples": [
+    {
+      "instance1": "animalHasFeathersImpliesBird",
+      "relation": "usesPredicate",
+      "instance2": "bluebird"
+    },
+    {
+      "instance1": "animalHasFeathersImpliesBird",
+      "relation": "derivedBy",
+      "instance2": "modusPonens"
+    },
+    {
+      "instance1": "animalLaysEggsAndFliesImpliesBird",
+      "relation": "provedBy",
+      "instance2": "resolutionTheoremProving"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "goodLogicalProof",
+      "description": "Logical knowledge has been represented, evaluated, inferred, and proved using formal logic.",
+      "property": "logicalRepresentationCreated(finalConfiguration) && truthValuesComputed(finalConfiguration) && inferencesDerived(finalConfiguration) && proofConstructed(finalConfiguration)",
+      "equivalentTo": "FormalLogicSolution"
+    }
+  ]
+}

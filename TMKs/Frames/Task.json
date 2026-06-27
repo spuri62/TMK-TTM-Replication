@@ -1,0 +1,127 @@
+{
+  "model": "Task",
+  "tasks": [
+    {
+      "name": "UnderstandUsingFrames",
+      "description": "Use frames to represent and interpret the meaning of a sentence through stereotypical situations and default inferences.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "given": "containsSentence(initialConfiguration)",
+      "makes": "goodFrameInterpretation(finalConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "FrameUnderstandingSolution",
+          "actualArguments": [
+            "initialConfiguration",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IdentifyFrame",
+      "description": "Identify the frame associated with the main action or concept in the sentence.",
+      "inputParameters": [
+        "sentence: sentence"
+      ],
+      "outputParameters": [
+        "frame: frame"
+      ],
+      "given": "containsAction(sentence)",
+      "makes": "frameSelected(frame)",
+      "means": [
+        {
+          "mechanismReference": "IdentifyFrameMechanism",
+          "actualArguments": [
+            "sentence",
+            "frame"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FillSlots",
+      "description": "Populate frame slots using information extracted from the sentence.",
+      "inputParameters": [
+        "frame: frame",
+        "sentence: sentence"
+      ],
+      "outputParameters": [
+        "filledFrame: frame"
+      ],
+      "given": "frameSelected(frame)",
+      "makes": "slotsFilled(filledFrame)",
+      "means": [
+        {
+          "mechanismReference": "FillSlotsMechanism",
+          "actualArguments": [
+            "frame",
+            "sentence",
+            "filledFrame"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ApplyDefaults",
+      "description": "Apply default slot fillers associated with the frame stereotype.",
+      "inputParameters": [
+        "filledFrame: frame"
+      ],
+      "outputParameters": [
+        "completedFrame: frame"
+      ],
+      "given": "slotsFilled(filledFrame)",
+      "makes": "defaultsApplied(completedFrame)",
+      "means": [
+        {
+          "mechanismReference": "ApplyDefaultsMechanism",
+          "actualArguments": [
+            "filledFrame",
+            "completedFrame"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MakeInferences",
+      "description": "Use frame fillers and defaults to make common-sense inferences.",
+      "inputParameters": [
+        "completedFrame: frame"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "given": "defaultsApplied(completedFrame)",
+      "makes": "goodFrameInterpretation(finalConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "MakeInferencesMechanism",
+          "actualArguments": [
+            "completedFrame",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Complete",
+      "description": "Frame interpretation completed successfully.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    },
+    {
+      "name": "FailureGoal",
+      "description": "Frame interpretation failed.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    }
+  ]
+}

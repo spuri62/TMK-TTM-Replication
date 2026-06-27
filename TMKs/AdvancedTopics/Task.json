@@ -1,0 +1,118 @@
+{
+  "model": "Task",
+  "tasks": [
+    {
+      "name": "AnalyzeAdvancedKBAITopic",
+      "description": "Analyze an advanced KBAI scenario using visuospatial reasoning, systems thinking, design thinking, and creativity.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "given": "valid(initialConfiguration)",
+      "makes": "goodAdvancedAnalysis(finalConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "AdvancedTopicsSolution",
+          "actualArguments": [
+            "initialConfiguration",
+            "knowledgeBase",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PerformVisuospatialReasoning",
+      "description": "Identify visual and spatial knowledge and determine whether representations are propositional or analogical.",
+      "inputParameters": [
+        "initialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "visuospatialConfiguration: configuration"
+      ],
+      "means": [
+        {
+          "mechanismReference": "PerformVisuospatialReasoningMechanism",
+          "actualArguments": [
+            "initialConfiguration",
+            "visuospatialConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PerformSystemsThinking",
+      "description": "Infer invisible processes and structure-behavior-function relationships in a system.",
+      "inputParameters": [
+        "visuospatialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "systemsConfiguration: configuration"
+      ],
+      "means": [
+        {
+          "mechanismReference": "PerformSystemsThinkingMechanism",
+          "actualArguments": [
+            "visuospatialConfiguration",
+            "systemsConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PerformDesignThinking",
+      "description": "Reason about an ill-defined and open-ended design problem.",
+      "inputParameters": [
+        "systemsConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "designConfiguration: configuration"
+      ],
+      "means": [
+        {
+          "mechanismReference": "PerformDesignThinkingMechanism",
+          "actualArguments": [
+            "systemsConfiguration",
+            "designConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EvaluateCreativity",
+      "description": "Determine whether a solution produces a non-obvious and desirable product.",
+      "inputParameters": [
+        "designConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "means": [
+        {
+          "mechanismReference": "EvaluateCreativityMechanism",
+          "actualArguments": [
+            "designConfiguration",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Complete",
+      "description": "Successful completion of the analysis.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    },
+    {
+      "name": "FailureGoal",
+      "description": "Analysis failed.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    }
+  ]
+}

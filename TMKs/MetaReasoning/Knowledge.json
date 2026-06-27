@@ -1,0 +1,128 @@
+{
+  "model": "Knowledge",
+  "concepts": [
+    {
+      "name": "metaReasoning",
+      "description": "Thinking about thinking; reasoning about knowledge, reasoning, and learning."
+    },
+    {
+      "name": "mistake",
+      "description": "An error in knowledge, reasoning, or learning."
+    },
+    {
+      "name": "knowledgeGap",
+      "description": "Missing knowledge required to complete reasoning or learning."
+    },
+    {
+      "name": "learningGoal",
+      "description": "A goal generated to acquire missing knowledge."
+    },
+    {
+      "name": "strategy",
+      "description": "A reasoning or learning method available to an agent."
+    },
+    {
+      "name": "goal",
+      "description": "A desired objective pursued by the agent."
+    },
+    {
+      "name": "configuration",
+      "description": "State of the agent's knowledge and reasoning process."
+    }
+  ],
+  "instances": [
+    {
+      "name": "cupExplanationMistake",
+      "concept": "mistake"
+    },
+    {
+      "name": "blocksWorldCulDeSac",
+      "concept": "mistake"
+    },
+    {
+      "name": "thickSidesGap",
+      "concept": "knowledgeGap"
+    },
+    {
+      "name": "caseBasedReasoning",
+      "concept": "strategy"
+    },
+    {
+      "name": "constraintPropagation",
+      "concept": "strategy"
+    },
+    {
+      "name": "problemReduction",
+      "concept": "strategy"
+    },
+    {
+      "name": "goalBasedAutonomy",
+      "concept": "goal"
+    },
+    {
+      "name": "initialConfiguration",
+      "concept": "configuration"
+    },
+    {
+      "name": "finalConfiguration",
+      "concept": "configuration"
+    }
+  ],
+  "relations": [
+    {
+      "name": "containsMistake",
+      "domain": "configuration",
+      "range": "mistake"
+    },
+    {
+      "name": "containsGap",
+      "domain": "configuration",
+      "range": "knowledgeGap"
+    },
+    {
+      "name": "spawns",
+      "domain": "knowledgeGap",
+      "range": "learningGoal"
+    },
+    {
+      "name": "selects",
+      "domain": "metaReasoning",
+      "range": "strategy"
+    },
+    {
+      "name": "integrates",
+      "domain": "metaReasoning",
+      "range": "strategy"
+    },
+    {
+      "name": "adaptsTo",
+      "domain": "metaReasoning",
+      "range": "goal"
+    }
+  ],
+  "triples": [
+    {
+      "instance1": "initialConfiguration",
+      "relation": "containsMistake",
+      "instance2": "cupExplanationMistake"
+    },
+    {
+      "instance1": "initialConfiguration",
+      "relation": "containsGap",
+      "instance2": "thickSidesGap"
+    },
+    {
+      "instance1": "thickSidesGap",
+      "relation": "spawns",
+      "instance2": "goalBasedAutonomy"
+    }
+  ],
+  "assertions": [
+    {
+      "name": "goodMetaReasoning",
+      "description": "Mistakes and gaps are identified, appropriate strategies are selected or integrated, and reasoning adapts to new goals.",
+      "property": "mistakeDetected AND learningGoalGenerated AND strategySelected AND strategyIntegrated AND goalAdapted",
+      "equivalentTo": "PerformMetaReasoning"
+    }
+  ]
+}

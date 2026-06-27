@@ -1,0 +1,128 @@
+{
+  "model": "Task",
+  "tasks": [
+    {
+      "name": "ReasonWithFormalLogic",
+      "description": "Represent knowledge in formal logic and derive provably correct conclusions.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "given": "logicalKnowledgeAvailable(initialConfiguration)",
+      "makes": "goodLogicalProof(finalConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "FormalLogicSolution",
+          "actualArguments": [
+            "initialConfiguration",
+            "knowledgeBase",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RepresentKnowledgeInLogic",
+      "description": "Translate conceptual knowledge into predicates, conjunctions, disjunctions, negations, and implications.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "logicalSentences: configuration"
+      ],
+      "given": "knowledgeAvailable(initialConfiguration)",
+      "makes": "logicalRepresentationCreated(logicalSentences)",
+      "means": [
+        {
+          "mechanismReference": "RepresentKnowledgeMechanism",
+          "actualArguments": [
+            "initialConfiguration",
+            "knowledgeBase",
+            "logicalSentences"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "EvaluateTruthValues",
+      "description": "Determine truth values of logical sentences using truth tables and logical properties.",
+      "inputParameters": [
+        "logicalSentences: configuration"
+      ],
+      "outputParameters": [
+        "evaluatedSentences: configuration"
+      ],
+      "given": "logicalRepresentationCreated(logicalSentences)",
+      "makes": "truthValuesComputed(evaluatedSentences)",
+      "means": [
+        {
+          "mechanismReference": "TruthTableMechanism",
+          "actualArguments": [
+            "logicalSentences",
+            "evaluatedSentences"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ApplyRulesOfInference",
+      "description": "Apply rules such as modus ponens and modus tollens to derive conclusions.",
+      "inputParameters": [
+        "evaluatedSentences: configuration"
+      ],
+      "outputParameters": [
+        "inferredSentences: configuration"
+      ],
+      "given": "truthValuesComputed(evaluatedSentences)",
+      "makes": "inferencesDerived(inferredSentences)",
+      "means": [
+        {
+          "mechanismReference": "InferenceMechanism",
+          "actualArguments": [
+            "evaluatedSentences",
+            "inferredSentences"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ProveByResolution",
+      "description": "Use implication elimination, conjunctive normal form, and resolution theorem proving to establish a conclusion.",
+      "inputParameters": [
+        "inferredSentences: configuration"
+      ],
+      "outputParameters": [
+        "proofConfiguration: configuration"
+      ],
+      "given": "inferencesDerived(inferredSentences)",
+      "makes": "proofConstructed(proofConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "ResolutionMechanism",
+          "actualArguments": [
+            "inferredSentences",
+            "proofConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Complete",
+      "description": "Successful completion of logical reasoning.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    },
+    {
+      "name": "FailureGoal",
+      "description": "Logical reasoning failed.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    }
+  ]
+}

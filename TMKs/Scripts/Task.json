@@ -1,0 +1,117 @@
+{
+  "model": "Task",
+  "tasks": [
+    {
+      "name": "UnderstandStoryUsingScripts",
+      "description": "Make sense of a discourse, story, or scene by selecting and instantiating an appropriate script and generating expectations.",
+      "inputParameters": [
+        "initialConfiguration: configuration",
+        "knowledgeBase: knowledgeBase"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "given": "storyAvailable(initialConfiguration)",
+      "makes": "goodScriptUnderstanding(finalConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "ScriptUnderstandingSolution",
+          "actualArguments": [
+            "initialConfiguration",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IdentifySituation",
+      "description": "Identify the stereotypical situation represented by the story or scene.",
+      "inputParameters": [
+        "initialConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "situation: situation"
+      ],
+      "means": [
+        {
+          "mechanismReference": "IdentifySituationMechanism",
+          "actualArguments": [
+            "initialConfiguration",
+            "situation"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SelectScript",
+      "description": "Select an appropriate script for the identified situation.",
+      "inputParameters": [
+        "situation: situation"
+      ],
+      "outputParameters": [
+        "script: script"
+      ],
+      "means": [
+        {
+          "mechanismReference": "SelectScriptMechanism",
+          "actualArguments": [
+            "situation",
+            "script"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "InstantiateScript",
+      "description": "Instantiate the script with specific actors, props, and context.",
+      "inputParameters": [
+        "script: script"
+      ],
+      "outputParameters": [
+        "instantiatedScript: script"
+      ],
+      "means": [
+        {
+          "mechanismReference": "InstantiateScriptMechanism",
+          "actualArguments": [
+            "script",
+            "instantiatedScript"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GenerateExpectations",
+      "description": "Use the instantiated script to infer likely events and expectations.",
+      "inputParameters": [
+        "instantiatedScript: script"
+      ],
+      "outputParameters": [
+        "expectations: expectations"
+      ],
+      "means": [
+        {
+          "mechanismReference": "GenerateExpectationsMechanism",
+          "actualArguments": [
+            "instantiatedScript",
+            "expectations"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Complete",
+      "description": "Story understanding completed successfully.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    },
+    {
+      "name": "FailureGoal",
+      "description": "Story understanding failed.",
+      "inputParameters": [],
+      "outputParameters": [],
+      "means": []
+    }
+  ]
+}
