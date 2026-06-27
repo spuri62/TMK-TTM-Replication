@@ -5,10 +5,18 @@
       "name": "ScriptUnderstandingSolution",
       "description": "Main FSM for understanding a story using scripts.",
       "inputParameters": [
-        "initialConfiguration: configuration"
+        "initialConfiguration: configuration",
+        "storyText: [string]",
+        "dialogueSequence: [string]",
+        "eventDescriptions: [string]",
+        "knowledgeBase: knowledgeBase"
       ],
       "outputParameters": [
-        "finalConfiguration: configuration"
+        "finalConfiguration: configuration",
+        "interpretation: string",
+        "inferences: string",
+        "predictedOutcomes: string",
+        "causalConnections: string"
       ],
       "organizer": {
         "startState": "S0",
@@ -27,7 +35,7 @@
             "name": "S1",
             "goalInvocation": {
               "goalReference": "SelectScript",
-              "type": "task",
+              "type": "operation",
               "actualArguments": ["situation"]
             }
           },
@@ -35,7 +43,7 @@
             "name": "S2",
             "goalInvocation": {
               "goalReference": "InstantiateScript",
-              "type": "task",
+              "type": "operation",
               "actualArguments": ["script"]
             }
           },
@@ -43,8 +51,12 @@
             "name": "S3",
             "goalInvocation": {
               "goalReference": "GenerateExpectations",
-              "type": "task",
-              "actualArguments": ["instantiatedScript"]
+              "type": "operation",
+              "actualArguments": [
+                "instantiatedScript",
+                "currentScene",
+                "positionInScene"
+              ]
             }
           },
           {
@@ -153,8 +165,17 @@
     {
       "name": "GenerateExpectationsMechanism",
       "description": "Generate expectations about future events and detect expectation violations.",
-      "inputParameters": ["instantiatedScript: script"],
-      "outputParameters": ["expectations: expectations"],
+      "inputParameters": [
+        "instantiatedScript: script",
+        "currentScene: scene",
+        "positionInScene: int"
+      ],
+      "outputParameters": [
+        "expectations: expectations",
+        "predictedEvents: [event]",
+        "expectedBehaviours: string",
+        "anomalyDetected: bool"
+      ],
       "requires": "scriptInstantiated",
       "provides": "expectationsGenerated"
     }

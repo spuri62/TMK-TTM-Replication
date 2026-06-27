@@ -3,7 +3,7 @@
   "tasks": [
     {
       "name": "AnalyzeAdvancedKBAITopic",
-      "description": "Analyze an advanced KBAI scenario using visuospatial reasoning, systems thinking, design thinking, and creativity.",
+      "description": "Analyze an advanced KBAI scenario using visuospatial reasoning, systems thinking, design thinking, and creativity to produce a consistent solution.",
       "inputParameters": [
         "initialConfiguration: configuration",
         "knowledgeBase: knowledgeBase"
@@ -26,13 +26,15 @@
     },
     {
       "name": "PerformVisuospatialReasoning",
-      "description": "Identify visual and spatial knowledge and determine whether representations are propositional or analogical.",
+      "description": "Reason with visuospatial knowledge by retrieving visuospatial content, encoding it, and determining whether representations are propositional or analogical.",
       "inputParameters": [
         "initialConfiguration: configuration"
       ],
       "outputParameters": [
         "visuospatialConfiguration: configuration"
       ],
+      "given": "initialConfiguration != null",
+      "makes": "visuospatialConfiguration != null",
       "means": [
         {
           "mechanismReference": "PerformVisuospatialReasoningMechanism",
@@ -45,13 +47,15 @@
     },
     {
       "name": "PerformSystemsThinking",
-      "description": "Infer invisible processes and structure-behavior-function relationships in a system.",
+      "description": "Construct a Structure-Behavior-Function (SBF) model by inferring invisible processes and aligning structure, behavior, and function relationships in a system.",
       "inputParameters": [
         "visuospatialConfiguration: configuration"
       ],
       "outputParameters": [
         "systemsConfiguration: configuration"
       ],
+      "given": "visuospatialConfiguration != null",
+      "makes": "systemsConfiguration != null",
       "means": [
         {
           "mechanismReference": "PerformSystemsThinkingMechanism",
@@ -64,13 +68,15 @@
     },
     {
       "name": "PerformDesignThinking",
-      "description": "Reason about an ill-defined and open-ended design problem.",
+      "description": "Perform design thinking by reasoning about an ill-defined and open-ended design problem, generating a design that satisfies goals under constraints.",
       "inputParameters": [
         "systemsConfiguration: configuration"
       ],
       "outputParameters": [
         "designConfiguration: configuration"
       ],
+      "given": "systemsConfiguration != null",
+      "makes": "designConfiguration != null",
       "means": [
         {
           "mechanismReference": "PerformDesignThinkingMechanism",
@@ -83,13 +89,15 @@
     },
     {
       "name": "EvaluateCreativity",
-      "description": "Determine whether a solution produces a non-obvious and desirable product.",
+      "description": "Determine whether a solution produces a non-obvious and desirable design by evaluating novelty and usefulness.",
       "inputParameters": [
         "designConfiguration: configuration"
       ],
       "outputParameters": [
         "finalConfiguration: configuration"
       ],
+      "given": "designConfiguration != null",
+      "makes": "finalConfiguration != null",
       "means": [
         {
           "mechanismReference": "EvaluateCreativityMechanism",
@@ -102,16 +110,20 @@
     },
     {
       "name": "Complete",
-      "description": "Successful completion of the analysis.",
+      "description": "Represents a success state in the task execution.",
       "inputParameters": [],
       "outputParameters": [],
+      "given": "true",
+      "makes": "true",
       "means": []
     },
     {
       "name": "FailureGoal",
-      "description": "Analysis failed.",
+      "description": "Represents a failure state in the task execution.",
       "inputParameters": [],
       "outputParameters": [],
+      "given": "true",
+      "makes": "false",
       "means": []
     }
   ]

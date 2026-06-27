@@ -12,16 +12,17 @@
       ],
       "organizer": {
         "startState": "S0",
-        "successState": "S4",
+        "successState": "S7",
         "failureState": "Fail",
         "states": [
           {
             "name": "S0",
             "goalInvocation": {
               "goalReference": "IdentifyPrincipalCharacteristicGroup",
-              "type": "task",
+              "type": "operation",
               "actualArguments": [
-                "initialConfiguration"
+                "initialConfiguration",
+                "groupConfiguration"
               ]
             }
           },
@@ -29,17 +30,18 @@
             "name": "S1",
             "goalInvocation": {
               "goalReference": "SelectParentCompound",
-              "type": "task",
+              "type": "operation",
               "actualArguments": [
-                "groupConfiguration"
+                "groupConfiguration",
+                "parentConfiguration"
               ]
             }
           },
           {
             "name": "S2",
             "goalInvocation": {
-              "goalReference": "AssignSubstituentsAndLocants",
-              "type": "task",
+              "goalReference": "NameParentHydrideAndUnsaturation",
+              "type": "operation",
               "actualArguments": [
                 "parentConfiguration"
               ]
@@ -48,15 +50,47 @@
           {
             "name": "S3",
             "goalInvocation": {
-              "goalReference": "ConstructSystematicName",
-              "type": "task",
+              "goalReference": "CombineParentWithSuffix",
+              "type": "operation",
               "actualArguments": [
-                "substituentConfiguration"
+                "parentConfiguration"
               ]
             }
           },
           {
             "name": "S4",
+            "goalInvocation": {
+              "goalReference": "AssignSubstituentsAndLocants",
+              "type": "operation",
+              "actualArguments": [
+                "parentConfiguration",
+                "substituentConfiguration"
+              ]
+            }
+          },
+          {
+            "name": "S5",
+            "goalInvocation": {
+              "goalReference": "AddStereodescriptors",
+              "type": "operation",
+              "actualArguments": [
+                "substituentConfiguration",
+                "finalConfiguration"
+              ]
+            }
+          },
+          {
+            "name": "S6",
+            "goalInvocation": {
+              "goalReference": "ConstructSystematicName",
+              "type": "operation",
+              "actualArguments": [
+                "finalConfiguration"
+              ]
+            }
+          },
+          {
+            "name": "S7",
             "goalInvocation": {
               "goalReference": "Complete",
               "type": "task",
@@ -86,11 +120,26 @@
           {
             "sourceState": "S2",
             "targetState": "S3",
-            "dataCondition": "!isEmpty(substituentConfiguration)"
+            "dataCondition": "parentNamed(parentConfiguration)"
           },
           {
             "sourceState": "S3",
             "targetState": "S4",
+            "dataCondition": "parentAndSuffixCombined(parentConfiguration)"
+          },
+          {
+            "sourceState": "S4",
+            "targetState": "S5",
+            "dataCondition": "!isEmpty(substituentConfiguration)"
+          },
+          {
+            "sourceState": "S5",
+            "targetState": "S6",
+            "dataCondition": "!isEmpty(finalConfiguration)"
+          },
+          {
+            "sourceState": "S6",
+            "targetState": "S7",
             "dataCondition": "goodNomenclature(finalConfiguration)"
           }
         ]
@@ -130,7 +179,7 @@
       "name": "ConstructSystematicNameMechanism",
       "description": "Combine parent, suffix, prefixes, locants and stereodescriptors into final name.",
       "inputParameters": [
-        "substituentConfiguration: configuration"
+        "finalConfiguration: configuration"
       ],
       "outputParameters": [
         "finalConfiguration: configuration"

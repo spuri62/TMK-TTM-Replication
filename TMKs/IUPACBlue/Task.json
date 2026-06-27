@@ -3,7 +3,7 @@
   "tasks": [
     {
       "name": "NameOrganicCompound",
-      "description": "Generate a systematic IUPAC name for an organic compound.",
+      "description": "Generate a systematic IUPAC name for an organic compound using substitutive nomenclature.",
       "inputParameters": [
         "initialConfiguration: configuration",
         "knowledgeBase: knowledgeBase"
@@ -11,8 +11,8 @@
       "outputParameters": [
         "finalConfiguration: configuration"
       ],
-      "given": "structureAvailable(initialConfiguration)",
-      "makes": "goodNomenclature(finalConfiguration)",
+      "given": "validChemicalStructure(initialConfiguration)",
+      "makes": "validSystematicName(finalConfiguration)",
       "means": [
         {
           "mechanismReference": "IUPACNomenclatureSolution",
@@ -25,13 +25,15 @@
     },
     {
       "name": "IdentifyPrincipalCharacteristicGroup",
-      "description": "Determine the principal characteristic group and suffix.",
+      "description": "Determine the principal characteristic group to be cited as the suffix based on seniority.",
       "inputParameters": [
         "initialConfiguration: configuration"
       ],
       "outputParameters": [
         "groupConfiguration: configuration"
       ],
+      "given": "validChemicalStructure(initialConfiguration)",
+      "makes": "principalGroupStepComplete(groupConfiguration)",
       "means": [
         {
           "mechanismReference": "IdentifyPrincipalCharacteristicGroupMechanism",
@@ -44,13 +46,15 @@
     },
     {
       "name": "SelectParentCompound",
-      "description": "Determine the senior parent compound.",
+      "description": "Determine the senior parent amongst structural components attached to the principal characteristic group.",
       "inputParameters": [
         "groupConfiguration: configuration"
       ],
       "outputParameters": [
         "parentConfiguration: configuration"
       ],
+      "given": "principalGroupStepComplete(groupConfiguration)",
+      "makes": "seniorParentIdentified(parentConfiguration)",
       "means": [
         {
           "mechanismReference": "SelectParentCompoundMechanism",
@@ -62,14 +66,56 @@
       ]
     },
     {
+      "name": "NameParentHydrideAndUnsaturation",
+      "description": "Name the parent hydride and specify any unsaturation (ene/yne endings).",
+      "inputParameters": [
+        "parentConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "parentConfiguration: configuration"
+      ],
+      "given": "seniorParentIdentified(parentConfiguration)",
+      "makes": "parentNamed(parentConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "ParentNamingMechanism",
+          "actualArguments": [
+            "parentConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CombineParentWithSuffix",
+      "description": "Combine the name of the parent hydride with the suffix for the principal characteristic group.",
+      "inputParameters": [
+        "parentConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "parentConfiguration: configuration"
+      ],
+      "given": "parentNamed(parentConfiguration)",
+      "makes": "parentAndSuffixCombined(parentConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "SuffixCombinationMechanism",
+          "actualArguments": [
+            "parentConfiguration"
+          ]
+        }
+      ]
+    },
+    {
       "name": "AssignSubstituentsAndLocants",
-      "description": "Identify substituents, multiplicative prefixes and locants.",
+      "description": "Identify substituents, add multiplicative prefixes, and assign locants to the complete structure, arranging the prefixes in alphabetical order.",
       "inputParameters": [
         "parentConfiguration: configuration"
       ],
       "outputParameters": [
         "substituentConfiguration: configuration"
       ],
+      "given": "parentAndSuffixCombined(parentConfiguration)",
+      "makes": "substituentsAndLocantsAssigned(substituentConfiguration)",
       "means": [
         {
           "mechanismReference": "AssignSubstituentsAndLocantsMechanism",
@@ -81,19 +127,41 @@
       ]
     },
     {
-      "name": "ConstructSystematicName",
-      "description": "Assemble the complete systematic name including stereodescriptors if present.",
+      "name": "AddStereodescriptors",
+      "description": "Determine chirality centres and other stereogenic units and add stereodescriptors.",
       "inputParameters": [
         "substituentConfiguration: configuration"
       ],
       "outputParameters": [
         "finalConfiguration: configuration"
       ],
+      "given": "substituentsAndLocantsAssigned(substituentConfiguration)",
+      "makes": "stereochemistryAssigned(finalConfiguration)",
+      "means": [
+        {
+          "mechanismReference": "StereochemistryMechanism",
+          "actualArguments": [
+            "substituentConfiguration",
+            "finalConfiguration"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ConstructSystematicName",
+      "description": "Assemble the complete systematic name including stereodescriptors if present.",
+      "inputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "outputParameters": [
+        "finalConfiguration: configuration"
+      ],
+      "given": "stereochemistryAssigned(finalConfiguration)",
+      "makes": "validSystematicName(finalConfiguration)",
       "means": [
         {
           "mechanismReference": "ConstructSystematicNameMechanism",
           "actualArguments": [
-            "substituentConfiguration",
             "finalConfiguration"
           ]
         }
@@ -104,6 +172,8 @@
       "description": "Naming process failed.",
       "inputParameters": [],
       "outputParameters": [],
+      "given": "true",
+      "makes": "failed(configuration)",
       "means": []
     },
     {
@@ -111,6 +181,8 @@
       "description": "Naming process completed.",
       "inputParameters": [],
       "outputParameters": [],
+      "given": "true",
+      "makes": "completed(configuration)",
       "means": []
     }
   ]

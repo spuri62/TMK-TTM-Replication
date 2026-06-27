@@ -21,31 +21,31 @@
             "goalInvocation": {
               "goalReference": "PerformVisuospatialReasoning",
               "type": "task",
-              "actualArguments": ["initialConfiguration"]
+              "actualArguments": ["initialConfiguration", "visuospatialConfiguration"]
             }
           },
           {
             "name": "S1",
             "goalInvocation": {
               "goalReference": "PerformSystemsThinking",
-              "type": "task",
-              "actualArguments": ["visuospatialConfiguration"]
+              "type": "operation",
+              "actualArguments": ["visuospatialConfiguration", "systemsConfiguration"]
             }
           },
           {
             "name": "S2",
             "goalInvocation": {
               "goalReference": "PerformDesignThinking",
-              "type": "task",
-              "actualArguments": ["systemsConfiguration"]
+              "type": "operation",
+              "actualArguments": ["systemsConfiguration", "designConfiguration"]
             }
           },
           {
             "name": "S3",
             "goalInvocation": {
               "goalReference": "EvaluateCreativity",
-              "type": "task",
-              "actualArguments": ["designConfiguration"]
+              "type": "operation",
+              "actualArguments": ["designConfiguration", "finalConfiguration"]
             }
           },
           {
@@ -91,7 +91,7 @@
             "goalInvocation": {
               "goalReference": "IdentifyVisuospatialKnowledge",
               "type": "operation",
-              "actualArguments": ["initialConfiguration"]
+              "actualArguments": ["initialConfiguration", "visuospatialConfiguration"]
             }
           },
           {

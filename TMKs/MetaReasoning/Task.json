@@ -3,79 +3,104 @@
   "tasks": [
     {
       "name": "PerformMetaReasoning",
-      "description": "Reason about knowledge, reasoning, learning, and strategy use in order to detect mistakes, identify gaps, select or integrate strategies, and adapt to new goals.",
+      "description": "Solve a reasoning or learning problem using meta-reasoning processes.",
       "inputParameters": [
-        "initialConfiguration: configuration",
-        "knowledgeBase: knowledgeBase"
+        "problem: problem"
       ],
       "outputParameters": [
-        "finalConfiguration: configuration"
+        "resolution: result"
       ],
-      "given": "metaReasoningProblem(initialConfiguration)",
-      "makes": "goodMetaReasoning(finalConfiguration)",
+      "given": "problem != null",
+      "makes": "resolution != null",
       "means": [
         {
           "mechanismReference": "MetaReasoningSolution",
           "actualArguments": [
-            "initialConfiguration",
-            "knowledgeBase",
-            "finalConfiguration"
+            "problem",
+            "resolution"
           ]
         }
       ]
     },
     {
-      "name": "DetectMistake",
-      "description": "Reflect on knowledge, reasoning, or learning to identify errors.",
+      "name": "DetectIssue",
+      "description": "Detect an issue (error or gap) in a reasoning or learning problem.",
       "inputParameters": [
-        "initialConfiguration: configuration"
+        "problem: problem"
       ],
       "outputParameters": [
-        "mistake: mistake"
+        "issue: issue"
       ],
+      "given": "problem != null",
+      "makes": "issue != null",
       "means": [
         {
-          "mechanismReference": "DetectMistakeMechanism",
+          "mechanismReference": "DetectIssueSolution",
           "actualArguments": [
-            "initialConfiguration",
-            "mistake"
+            "problem",
+            "issue"
           ]
         }
       ]
     },
     {
-      "name": "IdentifyKnowledgeGap",
-      "description": "Detect missing knowledge, reasoning, or learning requirements and formulate a learning goal.",
+      "name": "ClassifyIssue",
+      "description": "Classify a detected issue into {'Error','Gap'}.",
       "inputParameters": [
-        "initialConfiguration: configuration"
+        "issue: issue"
       ],
       "outputParameters": [
-        "learningGoal: learningGoal"
+        "issueType: type"
       ],
+      "given": "issue != null",
+      "makes": "issueType in {'Error','Gap'}",
       "means": [
         {
-          "mechanismReference": "IdentifyKnowledgeGapMechanism",
+          "mechanismReference": "ClassifyIssueSolution",
           "actualArguments": [
-            "initialConfiguration",
-            "learningGoal"
+            "issue",
+            "issueType"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SpawnMetaGoal",
+      "description": "Create a meta-level goal based on the classified issue type.",
+      "inputParameters": [
+        "issueType: type"
+      ],
+      "outputParameters": [
+        "metaGoal: goal"
+      ],
+      "given": "issueType in {'Error','Gap'}",
+      "makes": "metaGoal != null",
+      "means": [
+        {
+          "mechanismReference": "SpawnMetaGoalSolution",
+          "actualArguments": [
+            "issueType",
+            "metaGoal"
           ]
         }
       ]
     },
     {
       "name": "SelectStrategy",
-      "description": "Choose a reasoning or learning strategy based on available knowledge, efficiency, and solution quality.",
+      "description": "Choose the most appropriate reasoning strategy to achieve the meta-goal.",
       "inputParameters": [
-        "problem: problem"
+        "metaGoal: goal"
       ],
       "outputParameters": [
         "selectedStrategy: strategy"
       ],
+      "given": "metaGoal != null",
+      "makes": "selectedStrategy != null",
       "means": [
         {
-          "mechanismReference": "SelectStrategyMechanism",
+          "mechanismReference": "SelectStrategySolution",
           "actualArguments": [
-            "problem",
+            "metaGoal",
             "selectedStrategy"
           ]
         }
@@ -83,38 +108,23 @@
     },
     {
       "name": "IntegrateStrategies",
-      "description": "Combine or shift between multiple strategies as problem solving evolves.",
+      "description": "Apply the selected strategy; if progress stalls, integrate or switch strategies to satisfy the meta-goal.",
       "inputParameters": [
-        "selectedStrategy: strategy"
+        "selectedStrategy: strategy",
+        "metaGoal: goal"
       ],
       "outputParameters": [
-        "integratedStrategy: strategy"
+        "resolution: result"
       ],
+      "given": "selectedStrategy != null && metaGoal != null",
+      "makes": "resolution != null",
       "means": [
         {
-          "mechanismReference": "IntegrateStrategiesMechanism",
+          "mechanismReference": "IntegrateStrategiesSolution",
           "actualArguments": [
             "selectedStrategy",
-            "integratedStrategy"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "AdaptToNewGoal",
-      "description": "Use goal-based autonomy to adapt reasoning and learning to a newly assigned goal.",
-      "inputParameters": [
-        "newGoal: goal"
-      ],
-      "outputParameters": [
-        "adaptedGoalState: goalState"
-      ],
-      "means": [
-        {
-          "mechanismReference": "AdaptToNewGoalMechanism",
-          "actualArguments": [
-            "newGoal",
-            "adaptedGoalState"
+            "metaGoal",
+            "resolution"
           ]
         }
       ]

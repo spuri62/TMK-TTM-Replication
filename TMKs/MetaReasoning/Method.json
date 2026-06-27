@@ -5,11 +5,10 @@
       "name": "MetaReasoningSolution",
       "description": "Top-level FSM for meta-reasoning.",
       "inputParameters": [
-        "initialConfiguration: configuration",
-        "knowledgeBase: knowledgeBase"
+        "problem: problem"
       ],
       "outputParameters": [
-        "finalConfiguration: configuration"
+        "resolution: result"
       ],
       "organizer": {
         "startState": "MR_S0",
@@ -19,41 +18,44 @@
           {
             "name": "MR_S0",
             "goalInvocation": {
-              "goalReference": "DetectMistake",
+              "goalReference": "DetectIssue",
               "type": "task",
-              "actualArguments": ["initialConfiguration"]
+              "actualArguments": ["problem"]
             }
           },
           {
             "name": "MR_S1",
             "goalInvocation": {
-              "goalReference": "IdentifyKnowledgeGap",
+              "goalReference": "ClassifyIssue",
               "type": "task",
-              "actualArguments": ["initialConfiguration"]
+              "actualArguments": ["issue"]
             }
           },
           {
             "name": "MR_S2",
             "goalInvocation": {
-              "goalReference": "SelectStrategy",
-              "type": "task",
-              "actualArguments": ["initialConfiguration"]
+              "goalReference": "SpawnMetaGoal",
+              "type": "operation",
+              "actualArguments": ["issueType"]
             }
           },
           {
             "name": "MR_S3",
             "goalInvocation": {
-              "goalReference": "IntegrateStrategies",
-              "type": "task",
-              "actualArguments": ["selectedStrategy"]
+              "goalReference": "SelectStrategy",
+              "type": "operation",
+              "actualArguments": ["metaGoal"]
             }
           },
           {
             "name": "MR_S4",
             "goalInvocation": {
-              "goalReference": "AdaptToNewGoal",
-              "type": "task",
-              "actualArguments": ["newGoal"]
+              "goalReference": "IntegrateStrategies",
+              "type": "operation",
+              "actualArguments": [
+                "selectedStrategy",
+                "metaGoal"
+              ]
             }
           },
           {
@@ -74,20 +76,20 @@
           }
         ],
         "transitions": [
-          { "sourceState": "MR_S0", "targetState": "MR_S1", "dataCondition": "!isEmpty(mistake)" },
-          { "sourceState": "MR_S0", "targetState": "MR_Fail", "dataCondition": "isEmpty(mistake)" },
+          { "sourceState": "MR_S0", "targetState": "MR_S1", "dataCondition": "!isEmpty(issue)" },
+          { "sourceState": "MR_S0", "targetState": "MR_Fail", "dataCondition": "isEmpty(issue)" },
 
-          { "sourceState": "MR_S1", "targetState": "MR_S2", "dataCondition": "!isEmpty(learningGoal)" },
-          { "sourceState": "MR_S1", "targetState": "MR_Fail", "dataCondition": "isEmpty(learningGoal)" },
+          { "sourceState": "MR_S1", "targetState": "MR_S2", "dataCondition": "!isEmpty(issueType)" },
+          { "sourceState": "MR_S1", "targetState": "MR_Fail", "dataCondition": "isEmpty(issueType)" },
 
-          { "sourceState": "MR_S2", "targetState": "MR_S3", "dataCondition": "!isEmpty(selectedStrategy)" },
-          { "sourceState": "MR_S2", "targetState": "MR_Fail", "dataCondition": "isEmpty(selectedStrategy)" },
+          { "sourceState": "MR_S2", "targetState": "MR_S3", "dataCondition": "!isEmpty(metaGoal)" },
+          { "sourceState": "MR_S2", "targetState": "MR_Fail", "dataCondition": "isEmpty(metaGoal)" },
 
-          { "sourceState": "MR_S3", "targetState": "MR_S4", "dataCondition": "!isEmpty(integratedStrategy)" },
-          { "sourceState": "MR_S3", "targetState": "MR_Fail", "dataCondition": "isEmpty(integratedStrategy)" },
+          { "sourceState": "MR_S3", "targetState": "MR_S4", "dataCondition": "!isEmpty(selectedStrategy)" },
+          { "sourceState": "MR_S3", "targetState": "MR_Fail", "dataCondition": "isEmpty(selectedStrategy)" },
 
-          { "sourceState": "MR_S4", "targetState": "MR_Done", "dataCondition": "goalAdapted(adaptedGoalState)" },
-          { "sourceState": "MR_S4", "targetState": "MR_Fail", "dataCondition": "!goalAdapted(adaptedGoalState)" }
+          { "sourceState": "MR_S4", "targetState": "MR_Done", "dataCondition": "!isEmpty(resolution)" },
+          { "sourceState": "MR_S4", "targetState": "MR_Fail", "dataCondition": "isEmpty(resolution)" }
         ]
       }
     },
@@ -199,19 +201,24 @@
     {
       "name": "SelectStrategyMechanism",
       "description": "Choose a strategy based on knowledge availability, computational efficiency, and solution quality.",
-      "inputParameters": ["problem: problem"],
+      "inputParameters": ["metaGoal: goal"],
       "outputParameters": ["selectedStrategy: strategy"],
-      "requires": "problemAvailable(problem)",
+      "requires": "metaGoal != null",
       "provides": "strategySelected(selectedStrategy)"
     },
 
     {
       "name": "IntegrateStrategiesMechanism",
       "description": "Shift among strategies and combine them during problem solving.",
-      "inputParameters": ["selectedStrategy: strategy"],
-      "outputParameters": ["integratedStrategy: strategy"],
+      "inputParameters": [
+        "selectedStrategy: strategy",
+        "metaGoal: goal"
+      ],
+      "outputParameters": [
+        "resolution: result"
+      ],
       "requires": "strategySelected(selectedStrategy)",
-      "provides": "strategyIntegrated(integratedStrategy)"
+      "provides": "resolution != null"
     },
 
     {

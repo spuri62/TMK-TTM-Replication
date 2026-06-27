@@ -3,39 +3,235 @@
   "concepts": [
     {
       "name": "script",
-      "description": "Knowledge representation for a causally coherent set of events."
+      "description": "Knowledge representation for a causally coherent set of events with six main components: entry conditions, results, props, roles, tracks, and scenes.",
+      "properties": [
+        {
+          "name": "entryConditions",
+          "type": "entryCondition"
+        },
+        {
+          "name": "results",
+          "type": "result"
+        },
+        {
+          "name": "props",
+          "type": "list[prop]"
+        },
+        {
+          "name": "roles",
+          "type": "list[role]"
+        },
+        {
+          "name": "tracks",
+          "type": "list[track]"
+        },
+        {
+          "name": "scenes",
+          "type": "list[scene]"
+        }
+      ]
     },
     {
       "name": "entryCondition",
-      "description": "Conditions necessary for executing a script."
+      "description": "Conditions necessary for executing a script, representing prerequisites that must be satisfied before script activation.",
+      "properties": [
+        {
+          "name": "agentState",
+          "type": "object"
+        },
+        {
+          "name": "environmentalState",
+          "type": "object"
+        },
+        {
+          "name": "resourceAvailability",
+          "type": "list"
+        },
+        {
+          "name": "satisfactionRequirement",
+          "type": "boolean"
+        }
+      ]
     },
     {
       "name": "result",
-      "description": "Conditions that become true after script execution."
+      "description": "Conditions that become true after script execution, representing expected outcomes.",
+      "properties": [
+        {
+          "name": "agentStateChanges",
+          "type": "object"
+        },
+        {
+          "name": "environmentalChanges",
+          "type": "object"
+        },
+        {
+          "name": "resourceTransfers",
+          "type": "list"
+        },
+        {
+          "name": "satisfactionStates",
+          "type": "object"
+        }
+      ]
     },
     {
       "name": "prop",
-      "description": "Objects involved in execution of a script."
+      "description": "Objects involved in execution of a script.",
+      "properties": [
+        {
+          "name": "objectType",
+          "type": "string"
+        },
+        {
+          "name": "function",
+          "type": "string"
+        },
+        {
+          "name": "location",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "role",
-      "description": "Agents participating in a script."
+      "description": "Agents participating in a script.",
+      "properties": [
+        {
+          "name": "agentType",
+          "type": "string"
+        },
+        {
+          "name": "responsibilities",
+          "type": "list"
+        },
+        {
+          "name": "capabilities",
+          "type": "list"
+        }
+      ]
     },
     {
       "name": "track",
-      "description": "Variation or subclass of a script."
+      "description": "Variation or subclass of a script representing a specialization.",
+      "properties": [
+        {
+          "name": "scriptType",
+          "type": "string"
+        },
+        {
+          "name": "specificConditions",
+          "type": "object"
+        },
+        {
+          "name": "specializedEvents",
+          "type": "list"
+        }
+      ]
     },
     {
       "name": "scene",
-      "description": "Specific sequence of events within a script."
+      "description": "Specific sequence of events within a script.",
+      "properties": [
+        {
+          "name": "eventSequence",
+          "type": "orderedList"
+        },
+        {
+          "name": "participants",
+          "type": "list[role]"
+        },
+        {
+          "name": "actions",
+          "type": "list"
+        },
+        {
+          "name": "preconditions",
+          "type": "object"
+        },
+        {
+          "name": "postconditions",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "name": "event",
+      "description": "Observable action or state change in the world.",
+      "properties": [
+        {
+          "name": "actor",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "type": "string"
+        },
+        {
+          "name": "object",
+          "type": "string"
+        },
+        {
+          "name": "preconditions",
+          "type": "object"
+        },
+        {
+          "name": "postconditions",
+          "type": "object"
+        }
+      ]
     },
     {
       "name": "expectation",
-      "description": "Predicted event generated from a script."
+      "description": "Predicted event generated from a script.",
+      "properties": [
+        {
+          "name": "predictionMechanism",
+          "type": "process"
+        },
+        {
+          "name": "defaultAssumptions",
+          "type": "list"
+        },
+        {
+          "name": "violationDetection",
+          "type": "process"
+        },
+        {
+          "name": "emotionalResponses",
+          "type": "list"
+        }
+      ]
     },
     {
       "name": "configuration",
-      "description": "State of story understanding."
+      "description": "State of story understanding.",
+      "properties": [
+        {
+          "name": "narrativeComprehension",
+          "type": "process"
+        },
+        {
+          "name": "gapFilling",
+          "type": "process"
+        },
+        {
+          "name": "causalReasoning",
+          "type": "process"
+        },
+        {
+          "name": "situationClassification",
+          "type": "process"
+        },
+        {
+          "name": "scriptInstantiation",
+          "type": "process"
+        },
+        {
+          "name": "inferenceGeneration",
+          "type": "process"
+        }
+      ]
     },
     {
       "name": "story",
@@ -45,7 +241,47 @@
   "instances": [
     {
       "name": "restaurantScript",
-      "concept": "script"
+      "concept": "script",
+      "values": {
+        "entryConditions": {
+          "S_is_hungry": true,
+          "S_has_money": true
+        },
+        "results": {
+          "S_has_less_money": true,
+          "S_not_hungry": true,
+          "S_is_pleased": true,
+          "O_has_more_money": true
+        },
+        "props": [
+          "tables",
+          "menu",
+          "check",
+          "money",
+          "food",
+          "place"
+        ],
+        "roles": {
+          "S": "customer",
+          "W": "waiter",
+          "C": "cook",
+          "M": "cashier",
+          "O": "owner"
+        },
+        "tracks": [
+          "coffeehouseTrack",
+          "fastFoodTrack",
+          "casualDiningTrack",
+          "formalDiningTrack"
+        ],
+        "scenes": [
+          "enteringScene",
+          "orderingScene",
+          "eatingScene",
+          "payingScene",
+          "leavingScene"
+        ]
+      }
     },
     {
       "name": "coffeehouseTrack",
@@ -62,6 +298,22 @@
     {
       "name": "formalDiningTrack",
       "concept": "track"
+    },
+    {
+      "name": "enteringScene",
+      "concept": "scene",
+      "values": {
+        "eventSequence": [
+          "customer moves to restaurant",
+          "customer sees table",
+          "customer decides to sit",
+          "customer moves to table",
+          "customer sits down",
+          "waiter sees customer",
+          "waiter moves to customer",
+          "waiter moves menu to customer"
+        ]
+      }
     },
     {
       "name": "restaurantStory",
@@ -86,6 +338,31 @@
       "name": "containsScene",
       "domain": "script",
       "range": "scene"
+    },
+    {
+      "name": "involvesRole",
+      "domain": "script",
+      "range": "role"
+    },
+    {
+      "name": "usesProp",
+      "domain": "script",
+      "range": "prop"
+    },
+    {
+      "name": "precedes",
+      "domain": "event",
+      "range": "event"
+    },
+    {
+      "name": "causes",
+      "domain": "event",
+      "range": "event"
+    },
+    {
+      "name": "instantiates",
+      "domain": "story",
+      "range": "script"
     },
     {
       "name": "generates",
@@ -120,6 +397,11 @@
       "instance2": "formalDiningTrack"
     },
     {
+      "instance1": "restaurantScript",
+      "relation": "containsScene",
+      "instance2": "enteringScene"
+    },
+    {
       "instance1": "finalConfiguration",
       "relation": "understands",
       "instance2": "restaurantStory"
@@ -127,8 +409,33 @@
   ],
   "assertions": [
     {
+      "name": "S",
+      "description": "Abbreviation for customer",
+      "equivalentTo": "customer"
+    },
+    {
+      "name": "W",
+      "description": "Abbreviation for waiter",
+      "equivalentTo": "waiter"
+    },
+    {
+      "name": "C",
+      "description": "Abbreviation for cook",
+      "equivalentTo": "cook"
+    },
+    {
+      "name": "M",
+      "description": "Abbreviation for cashier",
+      "equivalentTo": "cashier"
+    },
+    {
+      "name": "O",
+      "description": "Abbreviation for owner",
+      "equivalentTo": "owner"
+    },
+    {
       "name": "goodScriptUnderstanding",
-      "description": "A story has been understood by selecting, instantiating, and using an appropriate script to generate coherent expectations.",
+      "description": "A story has been understood by selecting, instantiating, and using an appropriate script to generate coherent expectations, fill narrative gaps, and support causal reasoning.",
       "property": "understands(finalConfiguration, restaurantStory)",
       "equivalentTo": "GenerateExpectationsMechanism"
     }

@@ -3,22 +3,32 @@
   "tasks": [
     {
       "name": "UnderstandStoryUsingScripts",
-      "description": "Make sense of a discourse, story, or scene by selecting and instantiating an appropriate script and generating expectations.",
+      "description": "Make sense of a discourse, story, or scene by selecting and instantiating an appropriate script and generating expectations, using script knowledge representations to comprehend narratives, dialogues, and sequential events by matching observed events to stored script templates and filling in missing information through inference.",
       "inputParameters": [
         "initialConfiguration: configuration",
+        "narrativeText: [string]",
+        "dialogues: [string]",
+        "eventDescriptions: [string]",
         "knowledgeBase: knowledgeBase"
       ],
       "outputParameters": [
-        "finalConfiguration: configuration"
+        "finalConfiguration: configuration",
+        "interpretation: string",
+        "inferences: string",
+        "predictedOutcomes: string",
+        "causalConnections: string"
       ],
-      "given": "storyAvailable(initialConfiguration)",
-      "makes": "goodScriptUnderstanding(finalConfiguration)",
+      "given": "storyAvailable(initialConfiguration) and Agent possesses relevant scripts in memory that match the domain of the input story; input contains sufficient contextual cues to activate appropriate script",
+      "makes": "goodScriptUnderstanding(finalConfiguration) and Story is understood with all implicit information made explicit; agent can answer questions about unstated but implied events, motivations, and likely outcomes",
       "means": [
         {
           "mechanismReference": "ScriptUnderstandingSolution",
           "actualArguments": [
             "initialConfiguration",
-            "finalConfiguration"
+            "storyText",
+            "dialogueSequence",
+            "eventDescriptions",
+            "knowledgeBase"
           ]
         }
       ]
@@ -82,19 +92,27 @@
     },
     {
       "name": "GenerateExpectations",
-      "description": "Use the instantiated script to infer likely events and expectations.",
+      "description": "Use the instantiated script to infer likely events and expectations, generating predictions about what should happen next in a situation based on activated scripts and current scene progression.",
       "inputParameters": [
-        "instantiatedScript: script"
+        "instantiatedScript: script",
+        "currentScene: scene",
+        "positionInScript: int"
       ],
       "outputParameters": [
-        "expectations: expectations"
+        "expectations: expectations",
+        "predictedEvents: [event]",
+        "expectedBehaviours: string",
+        "anomalyDetected: bool"
       ],
+      "given": "Relevant script has been identified and activated for current situation; current position within script execution is determinable",
+      "makes": "Agent has clear expectations that can guide attention and response to unexpected events; violations of expectations can be detected and processed",
       "means": [
         {
           "mechanismReference": "GenerateExpectationsMechanism",
           "actualArguments": [
             "instantiatedScript",
-            "expectations"
+            "currentScene",
+            "positionInScene"
           ]
         }
       ]

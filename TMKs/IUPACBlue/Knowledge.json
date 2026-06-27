@@ -6,8 +6,24 @@
       "description": "Organic structure to be named."
     },
     {
+      "name": "configuration",
+      "description": "The state of the naming process."
+    },
+    {
+      "name": "chemicalStructure",
+      "description": "A representation of the organic molecule including atoms, bonds, and stereochemistry."
+    },
+    {
+      "name": "systematicName",
+      "description": "The Preferred IUPAC Name (PIN) constructed by the process."
+    },
+    {
       "name": "characteristicGroup",
       "description": "Functional group with nomenclature seniority."
+    },
+    {
+      "name": "principalCharacteristicGroup",
+      "description": "The most senior characteristic group cited as a suffix."
     },
     {
       "name": "parentCompound",
@@ -22,12 +38,16 @@
       "description": "Position identifier in a structure."
     },
     {
-      "name": "systematicName",
-      "description": "IUPAC systematic name."
+      "name": "stereodescriptor",
+      "description": "Descriptors such as R, S, E, Z, cis, trans used to specify configuration."
     },
     {
-      "name": "configuration",
-      "description": "State of the naming process."
+      "name": "multiplicativePrefix",
+      "description": "Prefixes like di, tri, tetra used when fragments occur multiple times."
+    },
+    {
+      "name": "unsaturationEnding",
+      "description": "Endings such as 'en' or 'yn' denoting double or triple bonds."
     }
   ],
   "instances": [
@@ -60,12 +80,40 @@
       "concept": "characteristicGroup"
     },
     {
+      "name": "alkene",
+      "concept": "characteristicGroup"
+    },
+    {
       "name": "heptane",
       "concept": "parentCompound"
     },
     {
       "name": "chloro",
       "concept": "substituent"
+    },
+    {
+      "name": "one",
+      "concept": "principalCharacteristicGroup"
+    },
+    {
+      "name": "en",
+      "concept": "unsaturationEnding"
+    },
+    {
+      "name": "yn",
+      "concept": "unsaturationEnding"
+    },
+    {
+      "name": "di",
+      "concept": "multiplicativePrefix"
+    },
+    {
+      "name": "E",
+      "concept": "stereodescriptor"
+    },
+    {
+      "name": "S",
+      "concept": "stereodescriptor"
     },
     {
       "name": "exampleName_(4S,5E)-4,6-dichlorohept-5-en-2-one",
@@ -76,7 +124,7 @@
     {
       "name": "hasPrincipalGroup",
       "domain": "organicCompound",
-      "range": "characteristicGroup"
+      "range": "principalCharacteristicGroup"
     },
     {
       "name": "hasParentCompound",
@@ -97,6 +145,21 @@
       "name": "producesName",
       "domain": "organicCompound",
       "range": "systematicName"
+    },
+    {
+      "name": "isSeniorTo",
+      "domain": "characteristicGroup",
+      "range": "characteristicGroup"
+    },
+    {
+      "name": "isAttachedTo",
+      "domain": "substituent",
+      "range": "parentCompound"
+    },
+    {
+      "name": "hasSuffix",
+      "domain": "parentCompound",
+      "range": "principalCharacteristicGroup"
     }
   ],
   "triples": [
@@ -109,6 +172,27 @@
       "instance1": "exampleName_(4S,5E)-4,6-dichlorohept-5-en-2-one",
       "relation": "hasParentCompound",
       "instance2": "heptane"
+    },
+
+    {
+      "instance1": "carboxylicAcid",
+      "relation": "isSeniorTo",
+      "instance2": "aldehyde"
+    },
+    {
+      "instance1": "aldehyde",
+      "relation": "isSeniorTo",
+      "instance2": "ketone"
+    },
+    {
+      "instance1": "ketone",
+      "relation": "isSeniorTo",
+      "instance2": "alcohol"
+    },
+    {
+      "instance1": "alcohol",
+      "relation": "isSeniorTo",
+      "instance2": "amine"
     }
   ],
   "assertions": [
@@ -117,6 +201,48 @@
       "description": "The final name correctly reflects principal characteristic group, parent compound, substituents, locants and stereodescriptors according to IUPAC naming order.",
       "property": "systematicNameCorrect",
       "equivalentTo": "ConstructSystematicNameMechanism"
+    },
+    {
+      "name": "principalGroupStepComplete",
+      "description": "Asserts that the principal characteristic group has been selected. Can be null if a molecule has no characteristic group.",
+      "property": "hasSuffix",
+      "equivalentTo": "PrincipalGroupMechanism"
+    },
+    {
+      "name": "seniorParentIdentified",
+      "description": "Asserts that the senior parent hydride has been determined.",
+      "property": "hasParentCompound",
+      "equivalentTo": "SeniorParentMechanism"
+    },
+    {
+      "name": "hydrideNamed",
+      "description": "Asserts that the base name of the senior parent hydride (chain or ring) has been determined.",
+      "property": "hasParentName",
+      "equivalentTo": "NameHydrideChainOrRing"
+    },
+    {
+      "name": "unsaturationSpecified",
+      "description": "Asserts that double and triple bonds have been identified and the 'an' ending has been changed to 'en' or 'yn'.",
+      "property": "hasUnsaturation",
+      "equivalentTo": "SpecifyUnsaturation"
+    },
+    {
+      "name": "parentNamed",
+      "description": "Asserts that the parent hydride has been named and unsaturation specified.",
+      "property": "hasParentCompound",
+      "equivalentTo": "ParentNamingMechanism"
+    },
+    {
+      "name": "parentAndSuffixCombined",
+      "description": "Asserts that the name of the parent hydride has been combined with the suffix for the principal characteristic group.",
+      "property": "hasParentCompound",
+      "equivalentTo": "SuffixCombinationMechanism"
+    },
+    {
+      "name": "substituentsAndLocantsAssigned",
+      "description": "Asserts that the substituents, locants, multiplicative prefixes, and their ordering have been determined.",
+      "property": "isFullyLocated",
+      "equivalentTo": "SubstituentLocantMechanism"
     }
   ]
 }

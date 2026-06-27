@@ -3,37 +3,38 @@
   "tasks": [
     {
       "name": "UnderstandUsingFrames",
-      "description": "Use frames to represent and interpret the meaning of a sentence through stereotypical situations and default inferences.",
+      "description": "Understand the meaning of a natural language sentence using frames, including stereotypical situations, default slot values, and implied consequences.",
       "inputParameters": [
-        "initialConfiguration: configuration",
+        "sentence: string",
         "knowledgeBase: knowledgeBase"
       ],
       "outputParameters": [
-        "finalConfiguration: configuration"
+        "interpretation: frameNetwork"
       ],
-      "given": "containsSentence(initialConfiguration)",
-      "makes": "goodFrameInterpretation(finalConfiguration)",
+      "given": "sentence != null",
+      "makes": "interpretation reflects the explicit and implicit meaning conveyed by sentence",
       "means": [
         {
-          "mechanismReference": "FrameUnderstandingSolution",
+          "mechanismReference": "ReasonUsingFrames",
           "actualArguments": [
-            "initialConfiguration",
-            "finalConfiguration"
+            "sentence",
+            "knowledgeBase",
+            "interpretation"
           ]
         }
       ]
     },
     {
       "name": "IdentifyFrame",
-      "description": "Identify the frame associated with the main action or concept in the sentence.",
+      "description": "Identify the frame associated with the main action or concept in a sentence.",
       "inputParameters": [
-        "sentence: sentence"
+        "sentence: string"
       ],
       "outputParameters": [
         "frame: frame"
       ],
-      "given": "containsAction(sentence)",
-      "makes": "frameSelected(frame)",
+      "given": "sentence != null",
+      "makes": "frame corresponds to the main action or concept expressed in sentence",
       "means": [
         {
           "mechanismReference": "IdentifyFrameMechanism",
@@ -46,16 +47,16 @@
     },
     {
       "name": "FillSlots",
-      "description": "Populate frame slots using information extracted from the sentence.",
+      "description": "Populate frame slots using information extracted from a sentence.",
       "inputParameters": [
         "frame: frame",
-        "sentence: sentence"
+        "sentence: string"
       ],
       "outputParameters": [
         "filledFrame: frame"
       ],
-      "given": "frameSelected(frame)",
-      "makes": "slotsFilled(filledFrame)",
+      "given": "frame != null AND sentence != null",
+      "makes": "filledFrame contains slot values derived from sentence",
       "means": [
         {
           "mechanismReference": "FillSlotsMechanism",
@@ -69,15 +70,15 @@
     },
     {
       "name": "ApplyDefaults",
-      "description": "Apply default slot fillers associated with the frame stereotype.",
+      "description": "Apply default slot fillers associated with a frame stereotype.",
       "inputParameters": [
         "filledFrame: frame"
       ],
       "outputParameters": [
         "completedFrame: frame"
       ],
-      "given": "slotsFilled(filledFrame)",
-      "makes": "defaultsApplied(completedFrame)",
+      "given": "filledFrame != null",
+      "makes": "completedFrame includes explicit slot values and applicable defaults",
       "means": [
         {
           "mechanismReference": "ApplyDefaultsMechanism",
@@ -90,21 +91,21 @@
     },
     {
       "name": "MakeInferences",
-      "description": "Use frame fillers and defaults to make common-sense inferences.",
+      "description": "Use frame slot values and defaults to derive common-sense implications.",
       "inputParameters": [
         "completedFrame: frame"
       ],
       "outputParameters": [
-        "finalConfiguration: configuration"
+        "interpretation: frameNetwork"
       ],
-      "given": "defaultsApplied(completedFrame)",
-      "makes": "goodFrameInterpretation(finalConfiguration)",
+      "given": "completedFrame != null",
+      "makes": "interpretation reflects implications supported by completedFrame",
       "means": [
         {
-          "mechanismReference": "MakeInferencesMechanism",
+          "mechanismReference": "ReasonUsingFrames",
           "actualArguments": [
             "completedFrame",
-            "finalConfiguration"
+            "interpretation"
           ]
         }
       ]

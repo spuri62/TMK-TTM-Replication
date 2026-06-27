@@ -2,28 +2,88 @@
   "model": "Knowledge",
   "concepts": [
     {
-      "name": "metaReasoning",
-      "description": "Thinking about thinking; reasoning about knowledge, reasoning, and learning."
+      "name": "MetaReasoning",
+      "description": "Thinking about thinking; reasoning about one's own knowledge, reasoning, and learning."
     },
     {
-      "name": "mistake",
-      "description": "An error in knowledge, reasoning, or learning."
+      "name": "Issue",
+      "description": "A detected difficulty in solving a problem, such as an error or a gap."
     },
     {
-      "name": "knowledgeGap",
-      "description": "Missing knowledge required to complete reasoning or learning."
+      "name": "Error",
+      "description": "A case where existing knowledge, reasoning, or learning is incorrect."
     },
     {
-      "name": "learningGoal",
-      "description": "A goal generated to acquire missing knowledge."
+      "name": "KnowledgeError",
+      "superConcept": ["Error"],
+      "description": "An error caused by incorrect or inconsistent knowledge."
     },
     {
-      "name": "strategy",
-      "description": "A reasoning or learning method available to an agent."
+      "name": "ReasoningError",
+      "superConcept": ["Error"],
+      "description": "An error caused by a faulty inference or reasoning step."
     },
     {
-      "name": "goal",
-      "description": "A desired objective pursued by the agent."
+      "name": "LearningError",
+      "superConcept": ["Error"],
+      "description": "An error caused by an incorrect learned explanation or concept."
+    },
+    {
+      "name": "Gap",
+      "description": "A missing piece of knowledge or reasoning that prevents progress on a problem."
+    },
+    {
+      "name": "KnowledgeGap",
+      "superConcept": ["Gap"],
+      "description": "Missing knowledge that links two parts of an explanation."
+    },
+    {
+      "name": "ReasoningGap",
+      "superConcept": ["Gap"],
+      "description": "A missing inference step that would connect known facts."
+    },
+    {
+      "name": "MetaGoal",
+      "description": "A goal at the meta-level to fix an error or fill a gap."
+    },
+    {
+      "name": "RepairGoal",
+      "superConcept": ["MetaGoal"],
+      "description": "A meta-goal to repair incorrect knowledge or reasoning."
+    },
+    {
+      "name": "AcquireGoal",
+      "superConcept": ["MetaGoal"],
+      "description": "A meta-goal to acquire missing knowledge or construct missing links."
+    },
+    {
+      "name": "Strategy",
+      "description": "A method or procedure for reasoning about a problem or meta-goal."
+    },
+    {
+      "name": "CaseBasedReasoning",
+      "superConcept": ["Strategy"],
+      "description": "Solving new problems by retrieving and adapting past cases."
+    },
+    {
+      "name": "MeansEndsAnalysis",
+      "superConcept": ["Strategy"],
+      "description": "Reducing the difference between current and goal states by selecting operators."
+    },
+    {
+      "name": "ProblemReduction",
+      "superConcept": ["Strategy"],
+      "description": "Decomposing a complex goal into simpler, more independent subgoals."
+    },
+    {
+      "name": "ConstraintPropagation",
+      "superConcept": ["Strategy"],
+      "description": "Using constraints to restrict the space of possible solutions."
+    },
+    {
+      "name": "GenerateAndTest",
+      "superConcept": ["Strategy"],
+      "description": "Generating candidate solutions and testing them with a heuristic or evaluation function."
     },
     {
       "name": "configuration",
@@ -33,31 +93,31 @@
   "instances": [
     {
       "name": "cupExplanationMistake",
-      "concept": "mistake"
+      "concept": "LearningError"
     },
     {
       "name": "blocksWorldCulDeSac",
-      "concept": "mistake"
+      "concept": "ReasoningError"
     },
     {
       "name": "thickSidesGap",
-      "concept": "knowledgeGap"
+      "concept": "KnowledgeGap"
     },
     {
       "name": "caseBasedReasoning",
-      "concept": "strategy"
+      "concept": "CaseBasedReasoning"
     },
     {
       "name": "constraintPropagation",
-      "concept": "strategy"
+      "concept": "ConstraintPropagation"
     },
     {
       "name": "problemReduction",
-      "concept": "strategy"
+      "concept": "ProblemReduction"
     },
     {
       "name": "goalBasedAutonomy",
-      "concept": "goal"
+      "concept": "AcquireGoal"
     },
     {
       "name": "initialConfiguration",
@@ -70,40 +130,35 @@
   ],
   "relations": [
     {
-      "name": "containsMistake",
+      "name": "containsError",
       "domain": "configuration",
-      "range": "mistake"
+      "range": "Error"
     },
     {
       "name": "containsGap",
       "domain": "configuration",
-      "range": "knowledgeGap"
+      "range": "Gap"
     },
     {
       "name": "spawns",
-      "domain": "knowledgeGap",
-      "range": "learningGoal"
+      "domain": "Gap",
+      "range": "AcquireGoal"
     },
     {
-      "name": "selects",
-      "domain": "metaReasoning",
-      "range": "strategy"
+      "name": "usesStrategy",
+      "domain": "MetaReasoning",
+      "range": "Strategy"
     },
     {
-      "name": "integrates",
-      "domain": "metaReasoning",
-      "range": "strategy"
-    },
-    {
-      "name": "adaptsTo",
-      "domain": "metaReasoning",
-      "range": "goal"
+      "name": "integratesWith",
+      "domain": "Strategy",
+      "range": "Strategy"
     }
   ],
   "triples": [
     {
       "instance1": "initialConfiguration",
-      "relation": "containsMistake",
+      "relation": "containsError",
       "instance2": "cupExplanationMistake"
     },
     {
@@ -120,9 +175,9 @@
   "assertions": [
     {
       "name": "goodMetaReasoning",
-      "description": "Mistakes and gaps are identified, appropriate strategies are selected or integrated, and reasoning adapts to new goals.",
-      "property": "mistakeDetected AND learningGoalGenerated AND strategySelected AND strategyIntegrated AND goalAdapted",
-      "equivalentTo": "PerformMetaReasoning"
+      "description": "Errors and gaps are identified, appropriate strategies are selected or integrated, and missing knowledge is acquired or incorrect knowledge repaired.",
+      "property": "errorDetected AND gapDetected AND metaGoalGenerated AND strategySelected AND strategyIntegrated",
+      "equivalentTo": "MetaReasoning"
     }
   ]
 }

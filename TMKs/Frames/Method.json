@@ -2,14 +2,14 @@
   "model": "Method",
   "methods": [
     {
-      "name": "FrameUnderstandingSolution",
+      "name": "ReasonUsingFrames",
       "description": "Main FSM for understanding a sentence using frames.",
       "inputParameters": [
-        "initialConfiguration: configuration",
+        "sentence: string",
         "knowledgeBase: knowledgeBase"
       ],
       "outputParameters": [
-        "finalConfiguration: configuration"
+        "interpretation: frameNetwork"
       ],
       "organizer": {
         "startState": "S0",
@@ -41,7 +41,7 @@
             "name": "S2",
             "goalInvocation": {
               "goalReference": "ApplyDefaults",
-              "type": "task",
+              "type": "operation",
               "actualArguments": [
                 "filledFrame"
               ]
@@ -51,7 +51,7 @@
             "name": "S3",
             "goalInvocation": {
               "goalReference": "MakeInferences",
-              "type": "task",
+              "type": "operation",
               "actualArguments": [
                 "completedFrame"
               ]
@@ -93,7 +93,7 @@
           {
             "sourceState": "S3",
             "targetState": "S4_Complete",
-            "dataCondition": "goodFrameInterpretation(finalConfiguration)"
+            "dataCondition": "goodFrameInterpretation(interpretation)"
           }
         ]
       }
@@ -102,7 +102,7 @@
     {
       "name": "IdentifyFrameMechanism",
       "description": "Select the frame corresponding to the action or concept in the sentence.",
-      "inputParameters": ["sentence: sentence"],
+      "inputParameters": ["sentence: string"],
       "outputParameters": ["frame: frame"],
       "organizer": {
         "startState": "IF_S0",
@@ -129,7 +129,7 @@
             "name": "IF_Done",
             "goalInvocation": {
               "goalReference": "OutputFrame",
-              "type": "operation",
+              "type": "task",
               "actualArguments": ["frame"]
             }
           },
@@ -154,7 +154,7 @@
     {
       "name": "FillSlotsMechanism",
       "description": "Populate frame slots from sentence information.",
-      "inputParameters": ["frame: frame","sentence: sentence"],
+      "inputParameters": ["frame: frame","sentence: string"],
       "outputParameters": ["filledFrame: frame"],
       "organizer": {
         "startState": "FS_S0",
@@ -181,7 +181,7 @@
             "name": "FS_Done",
             "goalInvocation": {
               "goalReference": "OutputFilledFrame",
-              "type": "operation",
+              "type": "task",
               "actualArguments": ["filledFrame"]
             }
           },
@@ -216,15 +216,15 @@
       "name": "MakeInferencesMechanism",
       "description": "Generate common-sense inferences from frame contents.",
       "inputParameters": ["completedFrame: frame"],
-      "outputParameters": ["finalConfiguration: configuration"],
+      "outputParameters": ["interpretation: frameNetwork"],
       "requires": "defaultsApplied(completedFrame)",
-      "provides": "goodFrameInterpretation(finalConfiguration)"
+      "provides": "goodFrameInterpretation(interpretation)"
     },
 
     {
       "name": "ExtractAction",
       "description": "Extract the main action associated with a frame.",
-      "inputParameters": ["sentence: sentence"],
+      "inputParameters": ["sentence: string"],
       "outputParameters": ["frame: frame"],
       "requires": "containsAction(sentence)",
       "provides": "frameSelected(frame)"
@@ -233,7 +233,7 @@
     {
       "name": "AssignSentenceFillers",
       "description": "Assign fillers from sentence content into frame slots.",
-      "inputParameters": ["frame: frame","sentence: sentence"],
+      "inputParameters": ["frame: frame","sentence: string"],
       "outputParameters": ["filledFrame: frame"],
       "requires": "frameSelected(frame)",
       "provides": "slotsFilled(filledFrame)"

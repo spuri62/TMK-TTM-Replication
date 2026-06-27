@@ -3,39 +3,39 @@
   "concepts": [
     {
       "name": "visuospatialKnowledge",
-      "description": "Knowledge containing visual what-information and spatial where-information."
+      "description": "Reasoning with visuospatial knowledge that combines visual information (what) and spatial information (where)."
     },
     {
       "name": "propositionalRepresentation",
-      "description": "Representation divorced from perceptual modality."
+      "description": "Symbolic representation with entities and relations expressed as propositions."
     },
     {
       "name": "analogicalRepresentation",
-      "description": "Representation with structural correspondence to the external world."
+      "description": "Structural representation maintaining spatial or relational correspondence between domains."
     },
     {
       "name": "system",
-      "description": "Collection of heterogeneous interacting components."
+      "description": "Set of components forming a functional whole."
     },
     {
       "name": "structure",
-      "description": "Visible organization of components."
+      "description": "Model representing physical components and visible interconnections of a system."
     },
     {
       "name": "behavior",
-      "description": "Invisible causal processes."
+      "description": "Model of internal processes or state transitions in a system."
     },
     {
       "name": "function",
-      "description": "Purpose served by a system."
+      "description": "Model describing intended outcomes or purposes of a system."
     },
     {
       "name": "designProblem",
-      "description": "Ill-defined and open-ended problem."
+      "description": "Ill-defined and open-ended problem where both problem and solution co-evolve."
     },
     {
       "name": "creativeProduct",
-      "description": "Non-obvious and desirable outcome."
+      "description": "Result that is novel, non-obvious, and desirable."
     },
     {
       "name": "configuration",
@@ -113,6 +113,26 @@
       "description": "The analysis correctly integrates visuospatial reasoning, systems thinking, design thinking, and creativity.",
       "property": "finalConfiguration contains validated visuospatial, systems, design and creativity analyses",
       "equivalentTo": "AnalyzeAdvancedKBAITopic"
+    },
+    {
+      "name": "VR",
+      "description": "Abbreviation for visuospatialKnowledge",
+      "equivalentTo": "VisuospatialReasoningSolution"
+    },
+    {
+      "name": "SBF",
+      "description": "Abbreviation for StructureBehaviorFunctionModeling",
+      "equivalentTo": "StructureBehaviorFunctionModelingSolution"
+    },
+    {
+      "name": "DT",
+      "description": "Abbreviation for DesignThinking",
+      "equivalentTo": "DesignThinkingSolution"
+    },
+    {
+      "name": "GCD",
+      "description": "Abbreviation for GenerateCreativeDesign",
+      "equivalentTo": "GenerateCreativeDesignSolution"
     }
   ]
 }
